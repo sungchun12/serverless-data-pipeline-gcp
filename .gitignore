@@ -1,4 +1,4 @@
 ### Ignore sensitive and workspace files ###
-/.vscode
+.vscode/
 service_account.json
 poc_workspace.code-workspace
