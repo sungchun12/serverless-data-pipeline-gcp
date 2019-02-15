@@ -26,9 +26,13 @@ def handler(request):
 	and appends Chicago Traffic API data into empty table
 	"""
 	#environment variables
-	bucket_name = os.environ['BUCKET_NAME'] #capture bucket name where raw data will be stored
-	dataset_name = os.environ['DATASET_NAME'] #initial dataset
-	table_name = os.environ['TABLE_NAME'] #name of table to capture data
+	# bucket_name = os.environ['BUCKET_NAME'] #capture bucket name where raw data will be stored
+	# dataset_name = os.environ['DATASET_NAME'] #initial dataset
+	# table_name = os.environ['TABLE_NAME'] #name of table to capture data
+
+	bucket_name = 'test_bucket' #capture bucket name where raw data will be stored
+	dataset_name = 'test_dataset' #initial dataset
+	table_name = 'test_table' #name of table to capture data	
 
 	# Unauthenticated client only works with public data sets. Note 'None'
 	# in place of application token, and no username or password:
@@ -72,4 +76,3 @@ def handler(request):
 	# Write the DataFrame to a BigQuery table
 	gbq.to_gbq(results_df, 'chicago_traffic.chitraffic', 'iconic-range-220603', if_exists='append')
 	return f'Uploaded raw csv file to bucket: {0}, and appended data to BigQuery dataset: {1}, table: {2} on '.format(bucket_name,dataset_name,table_name) + _getToday()
-
