@@ -1,3 +1,4 @@
 ### Ignore sensitive and workspace files ###
 service_account.json
 poc_workspace.code-workspace
+traffic_*
