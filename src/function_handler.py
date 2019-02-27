@@ -7,7 +7,6 @@ add description here
 from lib.schemas import schema_bq, schema_df
 from lib.bq_api_data_functions import bq_table_num_rows, query_unique_records, append_unique_records
 from lib.data_ingestion import create_results_df, upload_raw_data_gcs, convert_schema, check_nulls, check_null_outliers, upload_to_gbq
-# from lib.helper_functions import *
 from lib.infrastructure_setup import create_bucket, create_dataset_table
 
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
