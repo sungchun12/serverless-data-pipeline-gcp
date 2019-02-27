@@ -86,7 +86,7 @@ def check_null_outliers(null_columns, nulls_expected):
         null_outliers=[] #empty list to collect list of columns that are not expected to be null
         #if any columns in the nulls expected mismatch the nulls collected, append to null_outliers
         if any(x not in nulls_expected for x in null_columns): 
-            null_outliers.append(x)
+          	null_outliers.append(x)
         print("These are the outlier null columns: {}".format(null_outliers))
         return null_outliers
     except Exception as e:
