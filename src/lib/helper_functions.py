@@ -3,7 +3,6 @@ Add a description here
 """
 
 #built in python modules
-import os
 from datetime import datetime
 
 def _getToday():

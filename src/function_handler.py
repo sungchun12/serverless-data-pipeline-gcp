@@ -2,7 +2,7 @@
 Add description here
 """
 
- Change working directory from the workspace root to the ipynb file location. Turn this addition off with the DataScience.changeDirOnImportExport setting
+#  Change working directory from the workspace root to the ipynb file location. Turn this addition off with the DataScience.changeDirOnImportExport setting
 import os
 try:
 	os.chdir(os.path.join(os.getcwd(), 'src'))
@@ -50,7 +50,8 @@ except:
 # set GOOGLE_APPLICATION_CREDENTIALS="C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json"
 
 #lib modules
-from lib.schemas import *
+#TODO: trim unnecessary imports
+from lib.schemas import schema_bq, schema_df
 from lib.bq_api_data_functions import *
 from lib.data_ingestion import *
 from lib.helper_functions import *
@@ -103,4 +104,4 @@ def handler(schema_bq, schema_df):
 	# return f'Uploaded raw csv file to bucket: {0}, and appended data to BigQuery dataset: {1}, table: {2} on '.format(bucket_name,dataset_name,table_name) + _getToday() TODO: this will be the response from the api
 
 if __name__ == "__main__":
-		handler()
+		handler(schema_bq, schema_df)

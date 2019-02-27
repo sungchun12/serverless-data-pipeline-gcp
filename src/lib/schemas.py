@@ -5,8 +5,6 @@ Add a description here
 from google.cloud import bigquery
 
 
-
-
 schema_bq = [
     bigquery.SchemaField('_comments', 'STRING', mode='NULLABLE'),
     bigquery.SchemaField('_direction', 'STRING', mode='NULLABLE'),

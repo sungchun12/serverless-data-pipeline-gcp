@@ -2,19 +2,13 @@
 Add a description here
 """
 
-#built in python modules
-import os
-from datetime import datetime
 #gcp modules
 from gcloud import storage
 from google.cloud import bigquery
-import pandas_gbq as gbq
 from google.auth import compute_engine
-#api module
-from sodapy import Socrata
-#pandas dataframe module
-import pandas as pd
 
+#TODO: create a method where a service account is explicitly 
+# authorized to create a cloud function vs. using my local service account file
 def create_bucket(bucket_name):
     """Detects whether or not a new bucket needs to be created"""
     client = storage.Client.from_service_account_json('service_account.json') #authenticate service account
