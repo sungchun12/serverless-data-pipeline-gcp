@@ -1,16 +1,6 @@
 #!/usr/bin/env python
 """
 Add description here
-"""
-
-#  Change working directory from the workspace root to the ipynb file location. Turn this addition off with the DataScience.changeDirOnImportExport setting
-# import os
-# try:
-# 	os.chdir(os.path.join(os.getcwd(), 'src'))
-# 	print(os.getcwd())
-# except:
-# 	pass
-
 # make sure to install these packages before running:
 # these should all be in the requirements.txt file when deploying cloud function
 # pip install pandas
@@ -20,19 +10,6 @@ Add description here
 # pip install pandas-gbq
 # pip install gcloud
 
-# #built in python modules
-# import os
-# from datetime import datetime
-# #gcp modules
-# from gcloud import storage
-# from google.cloud import bigquery
-# import pandas_gbq as gbq
-# from google.auth import compute_engine
-# #api module
-# from sodapy import Socrata
-# #pandas dataframe module
-# import pandas as pd
-
 #this is needed for local development in order to appropriately access GCP from a local service account key
 #https://cloud.google.com/docs/authentication/production#auth-cloud-compute-engine-python
 #may not use this at all and have cloud functions use the default service account: https://cloud.google.com/docs/authentication/production#auth-cloud-compute-engine-python
@@ -40,10 +17,8 @@ Add description here
 # https://cloud.google.com/docs/authentication/getting-started#auth-cloud-implicit-python
 
 #run the below in windomws command prompt for authentication
-# set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json
-
-#%%
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./service_account.json"
+set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json
+"""
 
 #lib modules
 #TODO: trim unnecessary imports from wildcards
