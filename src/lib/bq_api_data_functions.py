@@ -5,7 +5,7 @@ Add a description here
 #gcp modules
 from google.cloud import bigquery
 
-#%%
+
 #get record count in raw table
 # from google.cloud import bigquery
 # client = bigquery.Client()
@@ -26,7 +26,7 @@ def bq_table_num_rows(dataset_name, table_name):
         raise e
 
 
-#%%
+
 #may not be possible to use table parameters in queries
 #think of something new
 #what if I define it as a formatted string first and then format it as a docstring using concatenates? It works
@@ -45,7 +45,7 @@ def query_max_timestamp(project_id, dataset_name, table_name):
         max_timestamp = row.max_timestamp.strftime('%Y-%m-%d %H:%M:%S')
         return max_timestamp
 
-#%%
+
 #query unique records and append to unique records table
 #Figure out how to query a table with python and append results
 #-it works only in first try into empty table and then errors out if table already exists
@@ -80,7 +80,7 @@ def query_unique_records(project_id, dataset_name, table_name, table_name_2):
     except Exception as e:
         raise e
 
-#%%
+
 def append_unique_records(project_id, dataset_name, table_name, table_name_2):
     """Queries unique staging table and appends new results onto final table"""
     try:

@@ -1,13 +1,15 @@
 #!/usr/bin/env python
-
+"""
+add description here
+"""
 
 #lib modules
 #TODO: trim unnecessary imports from wildcards
 from lib.schemas import schema_bq, schema_df
-from lib.bq_api_data_functions import *
-from lib.data_ingestion import *
+from lib.bq_api_data_functions import bq_table_num_rows, query_unique_records, append_unique_records
+from lib.data_ingestion import create_results_df, upload_raw_data_gcs, convert_schema, check_nulls, check_null_outliers, upload_to_gbq
 # from lib.helper_functions import *
-from lib.infrastructure_setup import *
+from lib.infrastructure_setup import create_bucket, create_dataset_table
 
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
 #TODO: add in flask requests module to work properly with cloud function
@@ -41,6 +43,7 @@ def handler(schema_bq, schema_df):
 	print(results_df_transformed.dtypes)
 
 	#check if there are any nulls in the columns except for _comments
+	#TODO: these will be added later to the response body
 	null_columns = check_nulls(results_df_transformed)
 	null_outliers = check_null_outliers(null_columns, nulls_expected)
 
