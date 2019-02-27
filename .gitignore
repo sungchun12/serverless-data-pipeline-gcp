@@ -2,6 +2,6 @@
 #confidential credentials
 service_account.json
 #workspace dev config
-poc_workspace.code-workspace
+cloud_function_poc.code-workspace
 #raw files
 traffic_* 
