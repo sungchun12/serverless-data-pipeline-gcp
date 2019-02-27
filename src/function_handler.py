@@ -87,10 +87,7 @@ schema_df = {'_comments': 'object',
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
 
 
-#%%
-def _getToday():
-    """Create timestamp string"""
-    return datetime.now().strftime('%Y%m%d%H%M%S')
+
 
 
 #%%
