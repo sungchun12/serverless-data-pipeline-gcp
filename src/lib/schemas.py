@@ -4,7 +4,7 @@ Add a description here
 #gcp modules
 from google.cloud import bigquery
 
-
+#apply a schema during BigQuery table creation
 schema_bq = [
     bigquery.SchemaField('_comments', 'STRING', mode='NULLABLE'),
     bigquery.SchemaField('_direction', 'STRING', mode='NULLABLE'),
@@ -20,8 +20,9 @@ schema_bq = [
     bigquery.SchemaField('segmentid', 'INTEGER', mode='NULLABLE'),
     bigquery.SchemaField('start_lon', 'FLOAT', mode='NULLABLE'),
     bigquery.SchemaField('street', 'STRING', mode='NULLABLE')
-] #apply a schema during BigQuery table creation
+] 
 
+#apply a schema to pandas dataframe to match BigQuery for equivalent data types
 schema_df = {'_comments': 'object', 
                '_direction': 'object', 
                '_fromst': 'object', 
@@ -36,4 +37,4 @@ schema_df = {'_comments': 'object',
                'segmentid': 'int64', 
                'start_lon': 'float64', 
                'street': 'object'
-              } #apply a schema to pandas dataframe to match BigQuery for equivalent data types
+              } 

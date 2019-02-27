@@ -1,17 +1,15 @@
+#!/usr/bin/env python
 """
 Add description here
 """
 
 #  Change working directory from the workspace root to the ipynb file location. Turn this addition off with the DataScience.changeDirOnImportExport setting
-import os
-try:
-	os.chdir(os.path.join(os.getcwd(), 'src'))
-	print(os.getcwd())
-except:
-	pass
-
-
-#!/usr/bin/env python
+# import os
+# try:
+# 	os.chdir(os.path.join(os.getcwd(), 'src'))
+# 	print(os.getcwd())
+# except:
+# 	pass
 
 # make sure to install these packages before running:
 # these should all be in the requirements.txt file when deploying cloud function
@@ -35,11 +33,6 @@ except:
 # #pandas dataframe module
 # import pandas as pd
 
-
-
-
-
-
 #this is needed for local development in order to appropriately access GCP from a local service account key
 #https://cloud.google.com/docs/authentication/production#auth-cloud-compute-engine-python
 #may not use this at all and have cloud functions use the default service account: https://cloud.google.com/docs/authentication/production#auth-cloud-compute-engine-python
@@ -49,8 +42,11 @@ except:
 #run the below in windomws command prompt for authentication
 # set GOOGLE_APPLICATION_CREDENTIALS="C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json"
 
+#%%
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./service_account.json"
+
 #lib modules
-#TODO: trim unnecessary imports
+#TODO: trim unnecessary imports from wildcards
 from lib.schemas import schema_bq, schema_df
 from lib.bq_api_data_functions import *
 from lib.data_ingestion import *
@@ -69,8 +65,8 @@ def handler(schema_bq, schema_df):
 	table_desc = 'Raw, public Chicago traffic data is appended to this table every 5 minutes'#table description
 	nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
 	partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
-	timestamp = _getToday()
-	create_bucket(bucket_name)
+	# timestamp = _getToday()
+	create_bucket(bucket_name) #TODO: figure out why my service account file isn't working
 	create_dataset_table(dataset_name, table_name, table_desc, schema_bq, partition_by)
 	results_df = create_results_df()
 	upload_raw_data_gcs(results_df, bucket_name)
