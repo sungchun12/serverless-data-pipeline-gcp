@@ -40,7 +40,7 @@ Add description here
 # https://cloud.google.com/docs/authentication/getting-started#auth-cloud-implicit-python
 
 #run the below in windomws command prompt for authentication
-# set GOOGLE_APPLICATION_CREDENTIALS="C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json"
+# set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json
 
 #%%
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./service_account.json"

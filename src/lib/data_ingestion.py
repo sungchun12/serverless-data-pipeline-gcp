@@ -42,7 +42,8 @@ def upload_raw_data_gcs(results_df, bucket_name):
     """Upload dataframe into google cloud storage bucket"""
     try: 
         # Write the DataFrame to GCS (Google Cloud Storage)
-        storage_client = storage.Client.from_service_account_json('service_account.json') #authenticate service account
+        storage_client = storage.Client()
+				# .from_service_account_json('service_account.json') #authenticate service account
         bucket = storage_client.bucket(bucket_name) #capture bucket details
         results_df.to_csv('traffic_' + _getToday() + '.csv') #convert dataframe to csv file type
         source_file_name = 'traffic_' + _getToday() + '.csv' #create the file name

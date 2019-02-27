@@ -11,7 +11,8 @@ from google.auth import compute_engine
 # authorized to create a cloud function vs. using my local service account file
 def create_bucket(bucket_name):
     """Detects whether or not a new bucket needs to be created"""
-    client = storage.Client.from_service_account_json('service_account.json') #authenticate service account
+    client = storage.Client()
+		# .from_service_account_json('service_account.json') #authenticate service account
     bucket = client.bucket(bucket_name) #capture bucket details
     bucket.location = 'US-CENTRAL1' #define regional location
     if not bucket.exists(): #checks if bucket doesn't exist
