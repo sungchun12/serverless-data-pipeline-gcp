@@ -13,7 +13,7 @@ from sodapy import Socrata
 #pandas dataframe module
 import pandas as pd
 
-from lib.helper_functions import *
+from lib.helper_functions import _getToday
 
 #%%
 #create pandas dataframe

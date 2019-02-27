@@ -50,7 +50,7 @@ Add description here
 from lib.schemas import schema_bq, schema_df
 from lib.bq_api_data_functions import *
 from lib.data_ingestion import *
-from lib.helper_functions import *
+# from lib.helper_functions import *
 from lib.infrastructure_setup import *
 
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
