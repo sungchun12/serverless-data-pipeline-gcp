@@ -1,5 +1,7 @@
 ### Ignore sensitive and workspace files ###
+#confidential credentials
 service_account.json
+#workspace dev config
 poc_workspace.code-workspace
-traffic_*
-Jupyter*
+#raw files
+traffic_* 
