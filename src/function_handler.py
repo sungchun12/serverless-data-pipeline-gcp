@@ -4,7 +4,6 @@ add description here
 """
 
 #lib modules
-#TODO: trim unnecessary imports from wildcards
 from lib.schemas import schema_bq, schema_df
 from lib.bq_api_data_functions import bq_table_num_rows, query_unique_records, append_unique_records
 from lib.data_ingestion import create_results_df, upload_raw_data_gcs, convert_schema, check_nulls, check_null_outliers, upload_to_gbq
@@ -19,12 +18,12 @@ def handler(schema_bq, schema_df):
 	project_id = 'iconic-range-220603' #capture the project id to where this data will land
 	bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
 	dataset_name = 'chicago_traffic_demo' #initial dataset
-	table_name = 'table_raw' #name of table to capture data
+	table_name = 'traffic_raw' #name of table to capture data
 	table_desc = 'Raw, public Chicago traffic data is appended to this table every 5 minutes'#table description
-	table_staging = 'unique_records_staging'
-	table_staging_desc = "Unique records from table: {}".format(table_name)
-	table_final = 'unique_records_final'
-	table_final_desc = "Unique records accumulated from table: {}".format(table_name)
+	table_staging = 'traffic_staging'
+	table_staging_desc = "Unique records greater than or equal to current date from table: {}".format(table_name)
+	table_final = 'traffic_final'
+	table_final_desc = "Unique, historical records accumulated from table: {}".format(table_name)
 	nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
 	partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
 
