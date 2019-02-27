@@ -46,15 +46,6 @@ import pandas as pd
 #run the below in windomws command prompt for authentication
 # set GOOGLE_APPLICATION_CREDENTIALS="C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json"
 
-#%%
-#define environment variables
-project_id = 'iconic-range-220603' #capture the project id to where this data will land
-bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
-dataset_name = 'chicago_traffic_demo' #initial dataset
-table_name = 'table_raw' #name of table to capture data
-table_desc = 'Raw, public Chicago traffic data is appended to this table every 5 minutes'#table description
-nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
-partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loadsl
 schema_bq = [
     bigquery.SchemaField('_comments', 'STRING', mode='NULLABLE'),
     bigquery.SchemaField('_direction', 'STRING', mode='NULLABLE'),
@@ -90,6 +81,16 @@ schema_df = {'_comments': 'object',
 
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
 
+
+def handler():
+	#define environment variables
+	project_id = 'iconic-range-220603' #capture the project id to where this data will land
+	bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
+	dataset_name = 'chicago_traffic_demo' #initial dataset
+	table_name = 'table_raw' #name of table to capture data
+	table_desc = 'Raw, public Chicago traffic data is appended to this table every 5 minutes'#table description
+	nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
+	partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
 
 
 
