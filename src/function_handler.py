@@ -8,6 +8,7 @@ from lib.schemas import schema_bq, schema_df
 from lib.bq_api_data_functions import bq_table_num_rows, query_unique_records, append_unique_records
 from lib.data_ingestion import create_results_df, upload_raw_data_gcs, convert_schema, check_nulls, check_null_outliers, upload_to_gbq
 from lib.infrastructure_setup import create_bucket, create_dataset_table
+#TODO: add in logging: https://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/
 
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
 #TODO: add in flask requests module to work properly with cloud function

@@ -11,6 +11,7 @@ schedule a Google Cloud function to input data into BigQuery using cloud schedul
 # # pip install google-cloud-bigquery
 # # pip install pandas-gbq
 # # pip install gcloud
+# # pip install pyarrow
 
 # #this is needed for local development in order to appropriately access GCP from a local service account key
 # #https://cloud.google.com/docs/authentication/production#auth-cloud-compute-engine-python

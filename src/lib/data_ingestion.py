@@ -38,21 +38,25 @@ def create_results_df():
 
 #%%
 #function upload data to cloud storage
+#GZIP compression uses more CPU resources than Snappy or LZO, but provides a higher compression ratio. 
+# GZip is often a good choice for cold data, which is accessed infrequently. 
+# Snappy or LZO are a better choice for hot data, which is accessed frequently.
 def upload_raw_data_gcs(results_df, bucket_name):
-    """Upload dataframe into google cloud storage bucket"""
-    try: 
-        # Write the DataFrame to GCS (Google Cloud Storage)
-        storage_client = storage.Client()
-				# .from_service_account_json('service_account.json') #authenticate service account
-        bucket = storage_client.bucket(bucket_name) #capture bucket details
-        results_df.to_csv('traffic_' + _getToday() + '.csv') #convert dataframe to csv file type
-        source_file_name = 'traffic_' + _getToday() + '.csv' #create the file name
-        blob = bucket.blob(os.path.basename(source_file_name)) #define the path to the file
-        blob.upload_from_filename(source_file_name) #upload to bucket
-        print("Successfully uploaded csv file into {}".format(bucket))
-    except Exception as e:
-        print("Failure to upload data to google cloud storage bucket :(")
-        raise e
+	"""Upload dataframe into google cloud storage bucket"""
+	try: 
+		# Write the DataFrame to GCS (Google Cloud Storage)
+		storage_client = storage.Client()
+		# .from_service_account_json('service_account.json') #authenticate service account
+		bucket = storage_client.bucket(bucket_name) #capture bucket details
+		timestamp = _getToday()
+		source_file_name = 'traffic_'+ timestamp + '.gzip' #create the file name
+		results_df.to_parquet(source_file_name, engine = 'pyarrow', compression = 'gzip')
+		blob = bucket.blob(os.path.basename(source_file_name)) #define the path to the file
+		blob.upload_from_filename(source_file_name) #upload to bucket
+		print("Successfully uploaded csv file into {}".format(bucket))
+	except Exception as e:
+		print("Failure to upload data to google cloud storage bucket :(")
+		raise e
 
 #%%
 #https://stackoverflow.com/questions/21886742/convert-pandas-dtypes-to-bigquery-type-representation
@@ -94,6 +98,8 @@ def check_null_outliers(null_columns, nulls_expected):
 
 #%%
 #figure out the nullable vs. required mode schema mismatch
+#TODO: refactor to use bigquery instead of pandas-gbq api as it should upload faster
+#https://cloud.google.com/bigquery/docs/pandas-gbq-migration#loading_a_pandas_dataframe_to_a_table
 def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
     """Uploads data into bigquery and appends if data already exists"""
     try:
