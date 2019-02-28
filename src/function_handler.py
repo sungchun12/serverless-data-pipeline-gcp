@@ -51,7 +51,9 @@ def handler(schema_bq, schema_df):
 
 	#Preprocess data for unique records accumulation
 	query_unique_records(project_id, dataset_name, table_name, table_staging)
+	bq_table_num_rows(dataset_name, table_staging)
 	append_unique_records(project_id, dataset_name, table_staging, table_final)
+	bq_table_num_rows(dataset_name, table_final)
 	print("DONE!")
 
 	#response body for api request
