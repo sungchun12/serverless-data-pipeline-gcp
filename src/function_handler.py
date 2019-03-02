@@ -15,6 +15,7 @@ from lib.infrastructure_setup import create_bucket, create_dataset_table
 def handler(schema_bq, schema_df):
 	"""Main function that orchestrates the data pipeline from start to finish"""
 	#define project variables
+	#TODO: create a class for all these objects?
 	project_id = 'iconic-range-220603' #capture the project id to where this data will land
 	bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
 	dataset_name = 'chicago_traffic_demo' #initial dataset
