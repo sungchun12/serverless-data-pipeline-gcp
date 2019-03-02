@@ -89,7 +89,7 @@ def append_unique_records(project_id, dataset_name, table_name, table_name_2):
         table_ref = bigquery_client.dataset(dataset_name).table(table_name_2) #set destination table
         job_config.destination = table_ref
         job_config.write_disposition = 'WRITE_APPEND'
-        sql = "SELECT a.* FROM `{0}.{1}.{2}` a LEFT JOIN `{0}.{1}.{3}` b on a.segmentid = b.segmentid AND a._last_updt = b._last_updt WHERE b.segmentid IS NULL AND b._last_updt IS NULL;"        .format(project_id, dataset_name, table_name, table_name_2)
+        sql = "SELECT a.* FROM `{0}.{1}.{2}` a LEFT JOIN `{0}.{1}.{3}` b on a.segmentid = b.segmentid AND a._last_updt = b._last_updt WHERE b.segmentid IS NULL AND b._last_updt IS NULL;".format(project_id, dataset_name, table_name, table_name_2)
         query_job = bigquery_client.query(
             sql,
             # Location must match that of the dataset(s) referenced in the query

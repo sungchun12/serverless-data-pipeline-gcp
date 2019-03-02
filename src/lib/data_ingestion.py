@@ -109,9 +109,11 @@ def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
 		dataset_ref = bigquery_client.dataset(dataset_name)
 		table_ref = dataset_ref.table(table_name)
 		# job_config = bigquery.job.LoadJobConfig() #configure how the data loads into bigquery
-		# job_config.write_disposition = 'WRITE_APPEND' #if table exists, append to it
+		# job_config.write_disposition = 'WRITE_TRUNCATE' #if table exists, append to it
 		# job_config.ignoreUnknownValues = 'T' #ignore columns that don't match destination schema
-		# bigquery_client.load_table_from_dataframe(results_df_transformed, table_ref, num_retries = 5, job_config = job_config).result() #TODO: bad request due to schema mismatch with an index field
+		# job_config.schema_update_options ='ALLOW_FIELD_ADDITION'
+		# #TODO: bad request due to schema mismatch with an index field
+		# bigquery_client.load_table_from_dataframe(results_df_transformed, table_ref, num_retries = 5, job_config = job_config).result() 
 		gbq.to_gbq(results_df_transformed, dataset_name+"."+table_name, project_id, 
 								if_exists='append', location = 'US', progress_bar=True)
 		print('Data uploaded into: {}'.format(table_ref.path))
