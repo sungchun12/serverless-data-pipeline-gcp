@@ -6,7 +6,7 @@ Add a description here
 import os
 #gcp modules
 from gcloud import storage
-# import pandas_gbq as gbq
+import pandas_gbq as gbq
 from google.cloud import bigquery
 from google.auth import compute_engine
 #api module
@@ -101,17 +101,19 @@ def check_null_outliers(null_columns, nulls_expected):
 #figure out the nullable vs. required mode schema mismatch
 #TODO: refactor to use bigquery instead of pandas-gbq api as it should upload faster
 #https://cloud.google.com/bigquery/docs/pandas-gbq-migration#loading_a_pandas_dataframe_to_a_table
+#https://github.com/pydata/pandas-gbq/issues/133#issuecomment-411119426
 def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
 	"""Uploads data into bigquery and appends if data already exists"""
 	try:
 		bigquery_client = bigquery.Client()
-		job_config = bigquery.job.LoadJobConfig() #configure how the data loads into bigquery
 		dataset_ref = bigquery_client.dataset(dataset_name)
 		table_ref = dataset_ref.table(table_name)
-		job_config.write_disposition = 'WRITE_APPEND' #if table exists, append to it
-		bigquery_client.load_table_from_dataframe(results_df_transformed, table_ref).result() #TODO: bad request due to schema mismatch with an index field
-		# gbq.to_gbq(results_df_transformed, dataset_name+"."+table_name, project_id, 
-								# if_exists='append', location = 'US', progress_bar=False)
+		# job_config = bigquery.job.LoadJobConfig() #configure how the data loads into bigquery
+		# job_config.write_disposition = 'WRITE_APPEND' #if table exists, append to it
+		# job_config.ignoreUnknownValues = 'T' #ignore columns that don't match destination schema
+		# bigquery_client.load_table_from_dataframe(results_df_transformed, table_ref, num_retries = 5, job_config = job_config).result() #TODO: bad request due to schema mismatch with an index field
+		gbq.to_gbq(results_df_transformed, dataset_name+"."+table_name, project_id, 
+								if_exists='append', location = 'US', progress_bar=True)
 		print('Data uploaded into: {}'.format(table_ref.path))
 	except Exception as e:
 		print("Failure to upload data to Bigquery :(")
