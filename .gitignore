@@ -5,3 +5,5 @@ service_account.json
 cloud_function_poc.code-workspace
 #raw files
 traffic_* 
+#ignore pycache files
+src/lib/__pycache__/*.pyc
