@@ -1,5 +1,6 @@
 """
-Add a description here
+This contains the bigquery and dataframe schemas for data warehouse setup.
+Change these values for your table schemas in scope.
 """
 #gcp modules
 from google.cloud import bigquery
