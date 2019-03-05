@@ -69,7 +69,10 @@ def table_exists(client, table_reference):
 #%%
 #https://cloud.google.com/bigquery/docs/python-client-migration#update_a_table
 def create_dataset_table(dataset_name, table_name, table_desc, schema, partition_by):
-    """Detects whether or not a new dataset and/or table need to be created"""
+    """
+		Detects whether or not a new dataset and/or table need to be created.
+		Creates the dataset and table if either do not exist.
+		"""
     #setup the client
     bigquery_client = bigquery.Client()
 

@@ -21,6 +21,6 @@ schedule a Google Cloud function to input data into BigQuery using cloud schedul
 
 # #run the below in windomws command prompt for authentication
 # # set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\sungwon.chung\Desktop\cloud_function_poc\src\service_account.json
-# #
+# #for linux: export GOOGLE_APPLICATION_CREDENTIALS="mnt/c/Users/sungwon.chung/Desktop/cloud_function_poc/src/service_account.json"
 
 # """
