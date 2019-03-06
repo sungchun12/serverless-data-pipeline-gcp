@@ -1,0 +1,6 @@
+pandas-gbq
+google-cloud-storage
+sodapy
+google-cloud-bigquery
+pyarrow
+pandas

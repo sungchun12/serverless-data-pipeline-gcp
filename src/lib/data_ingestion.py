@@ -8,7 +8,7 @@ import os
 from gcloud import storage
 import pandas_gbq as gbq
 from google.cloud import bigquery
-from google.auth import compute_engine
+# from google.auth import compute_engine
 #api module
 from sodapy import Socrata
 #pandas dataframe module

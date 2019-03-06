@@ -5,7 +5,7 @@ Add a description here
 #gcp modules
 from gcloud import storage
 from google.cloud import bigquery
-from google.auth import compute_engine
+# from google.auth import compute_engine
 
 #TODO: create a method where a service account is explicitly 
 # authorized to create a cloud function vs. using my local service account file
