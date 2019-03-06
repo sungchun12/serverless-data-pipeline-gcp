@@ -82,7 +82,7 @@ def upload_raw_data_gcs(results_df, bucket_name):
 def convert_schema(results_df, schema_df):
 	"""Converts data types in dataframe to match BigQuery destination table"""
 	print(schema_df)
-	print(schema_df.items())
+	# print(schema_df.items())
 	for k, v in schema_df: #for each column name in the dictionary, convert the data type in the dataframe
 		results_df[k] = results_df[k].astype(v)
 	results_df_transformed = results_df
