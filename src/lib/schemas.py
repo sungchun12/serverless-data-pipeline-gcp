@@ -34,17 +34,17 @@ schema_bq = [
 
 #apply a schema to pandas dataframe to match BigQuery for equivalent data types
 schema_df = {'_comments': 'object', 
-               '_direction': 'object', 
-               '_fromst': 'object', 
-               '_last_updt': 'datetime64',          
-               '_length': 'float64', 
-               '_lif_lat': 'float64', 
-               '_lit_lat': 'float64', 
-               '_lit_lon': 'float64',
-               '_strheading': 'object', 
-               '_tost': 'object', 
-               '_traffic': 'int64', 
-               'segmentid': 'int64', 
-               'start_lon': 'float64', 
-               'street': 'object'
+							'_direction': 'object', 
+							'_fromst': 'object', 
+							'_last_updt': 'datetime64',          
+							'_length': 'float64', 
+							'_lif_lat': 'float64', 
+							'_lit_lat': 'float64', 
+							'_lit_lon': 'float64',
+							'_strheading': 'object', 
+							'_tost': 'object', 
+							'_traffic': 'int64', 
+							'segmentid': 'int64', 
+							'start_lon': 'float64', 
+							'street': 'object'
               } 
