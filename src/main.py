@@ -3,11 +3,10 @@
 add description here
 
 """
-#decoding module
+#decoding module for pubsub
 import base64
 
 #lib modules
-from lib.schemas import schema_bq, schema_df
 from lib.bq_api_data_functions import bq_table_num_rows, query_unique_records, append_unique_records
 from lib.data_ingestion import create_results_df, upload_raw_data_gcs, convert_schema, check_nulls, check_null_outliers, upload_to_gbq
 from lib.infrastructure_setup import create_bucket, create_dataset_table
@@ -38,8 +37,7 @@ def handler(event, context):
 	table_final_desc = "Unique, historical records accumulated from table: {}".format(table_name)
 	nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
 	partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
-	schema_bq = schema_bq #define the imported schema
-	schema_df = schema_df #define the imported schema
+	from lib.schemas import schema_bq, schema_df #import schemas
 
 	#setup infrastructure
 	create_bucket(bucket_name)
@@ -74,5 +72,5 @@ def handler(event, context):
 	#response body for api request
 	# return f'Uploaded raw csv file to bucket: {0}, and appended data to BigQuery dataset: {1}, table: {2} on '.format(bucket_name,dataset_name,table_name) + _getToday() TODO: this will be the response from the api
 
-if __name__ == "__main__":
-		handler(schema_bq, schema_df)
+# if __name__ == "__main__":
+# 		handler(event, context)

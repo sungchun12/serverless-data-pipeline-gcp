@@ -6,7 +6,7 @@
 gcloud functions deploy test-sung --entry-point handler --runtime python37 --trigger-topic test_topic
 
 #publish message to pubsub topic trigger
-gcloud pubsub topics publish test_topic --message sung
+gcloud pubsub topics publish test_topic --message "Can you see this?"
 
 #check logs
 gcloud functions logs read --limit 20

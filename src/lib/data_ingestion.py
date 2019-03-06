@@ -15,7 +15,7 @@ from sodapy import Socrata
 import pandas as pd
 
 from lib.helper_functions import _getToday
-from lib.schemas import schema_df
+# from lib.schemas import schema_df
 
 #%%
 #create pandas dataframe
