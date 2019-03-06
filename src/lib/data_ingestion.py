@@ -42,6 +42,11 @@ def create_results_df():
 #GZIP compression uses more CPU resources than Snappy or LZO, but provides a higher compression ratio. 
 # GZip is often a good choice for cold data, which is accessed infrequently. 
 # Snappy or LZO are a better choice for hot data, which is accessed frequently.
+# The only writeable part of the filesystem is the /tmp directory, which you can use to store temporary files in a function instance. 
+# This is a local disk mount point known as a "tmpfs" volume in which data written to the volume is stored in memory. 
+# Note that it will consume memory resources provisioned for the function.
+#TODO: fix the write to tmp directory
+#right now, it's erroring out because it's trying to write the parquet file to the default read only system
 def upload_raw_data_gcs(results_df, bucket_name):
 	"""Upload dataframe into google cloud storage bucket"""
 	try: 
@@ -51,10 +56,19 @@ def upload_raw_data_gcs(results_df, bucket_name):
 		bucket = storage_client.bucket(bucket_name) #capture bucket details
 		timestamp = _getToday()
 		source_file_name = 'traffic_'+ timestamp + '.gzip' #create the file name
+		temp_path = "./tmp"
+		os.chdir(temp_path) #change to tmp path
+		# blob.upload_from_string(results_df.to_parquet(source_file_name, engine = 'pyarrow', compression = 'gzip'),content_type='gzip')
 		results_df.to_parquet(source_file_name, engine = 'pyarrow', compression = 'gzip')
-		blob = bucket.blob(os.path.basename(source_file_name)) #define the path to the file
+		# blob = bucket.blob(os.path.basename(source_file_name)) #define the path to the file
+		blob = bucket.blob(source_file_name) #define the binary large object(blob)
 		blob.upload_from_filename(source_file_name) #upload to bucket
-		print("Successfully uploaded csv file into {}".format(bucket))
+		print("Successfully uploaded parquet gzip file into {}".format(bucket))
+		#delete files from temporary folder
+		for file in os.listdir(temp_path):
+			file_path = os.path.join(temp_path, file)
+			if os.path.isfile(file_path):
+				os.unlink(file_path)
 	except Exception as e:
 		print("Failure to upload data to google cloud storage bucket :(")
 		raise e

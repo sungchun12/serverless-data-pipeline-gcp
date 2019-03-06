@@ -7,3 +7,5 @@ cloud_function_poc.code-workspace
 traffic_* 
 #ignore pycache files
 src/lib/__pycache__/*.pyc
+#ignore temp folder
+tmp
