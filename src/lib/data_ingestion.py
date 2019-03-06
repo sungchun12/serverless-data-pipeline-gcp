@@ -2,10 +2,11 @@
 Add a description here
 """
 
+#%%
 #built in python modules
 import os
 #gcp modules
-from gcloud import storage
+from google.cloud import storage
 import pandas_gbq as gbq
 from google.cloud import bigquery
 #api module

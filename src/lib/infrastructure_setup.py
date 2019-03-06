@@ -3,7 +3,7 @@ Add a description here
 """
 
 #gcp modules
-from gcloud import storage
+from google.cloud import storage
 from google.cloud import bigquery
 
 #TODO: create a method where a service account is explicitly 
