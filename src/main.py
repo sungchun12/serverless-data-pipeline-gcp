@@ -22,8 +22,10 @@ def handler(event, context):
 				event (dict): Event payload.
 				context (google.cloud.functions.Context): Metadata for the event.
   """
+	#prints a message from the pubsub trigger
 	pubsub_message = base64.b64decode(event['data']).decode('utf-8')
 	print(pubsub_message)
+
 	#define project variables
 	#TODO: create a class for all these objects?
 	project_id = 'iconic-range-220603' #capture the project id to where this data will land
@@ -71,6 +73,3 @@ def handler(event, context):
 
 	#response body for api request
 	# return f'Uploaded raw csv file to bucket: {0}, and appended data to BigQuery dataset: {1}, table: {2} on '.format(bucket_name,dataset_name,table_name) + _getToday() TODO: this will be the response from the api
-
-# if __name__ == "__main__":
-# 		handler(event, context)

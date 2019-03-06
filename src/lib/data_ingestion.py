@@ -78,27 +78,13 @@ def upload_raw_data_gcs(results_df, bucket_name):
 #https://stackoverflow.com/questions/21886742/convert-pandas-dtypes-to-bigquery-type-representation
 #https://stackoverflow.com/questions/44953463/pandas-google-bigquery-schema-mismatch-makes-the-upload-fail
 #http://pbpython.com/pandas_dtypes.html
-#TODO: figure out what the hell is going on here, TypeError: 'Context' object is not iterable
 def convert_schema(results_df, schema_df):
 	"""Converts data types in dataframe to match BigQuery destination table"""
-	dict(schema_df)
-	print(schema_df)
-	for k in schema_df: #for each column name in the dictionary, convert the data type in the dataframe
-		results_df[k] = results_df[k].astype(schema_df.get(k))
+	for k, v in schema_df.items(): #for each column name in the dictionary, convert the data type in the dataframe
+		results_df[k] = results_df[k].astype(v)
 	results_df_transformed = results_df
 	print("Updated schema to match BigQuery destination table")
 	return results_df_transformed
-
-#original function that works locally
-# def convert_schema(results_df, schema_df):
-# 	"""Converts data types in dataframe to match BigQuery destination table"""
-# 	print(schema_df)
-# 	# print(schema_df.items())
-# 	for k, v in schema_df.items(): #for each column name in the dictionary, convert the data type in the dataframe
-# 		results_df[k] = results_df[k].astype(v)
-# 	results_df_transformed = results_df
-# 	print("Updated schema to match BigQuery destination table")
-# 	return results_df_transformed
 
 def check_nulls(results_df_transformed):
 	"""Checks if there are any nulls in the columns"""
