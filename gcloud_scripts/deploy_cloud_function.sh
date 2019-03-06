@@ -1,0 +1,1 @@
+gcloud functions deploy test-1 --entry-point handler --runtime python37 --trigger-http
