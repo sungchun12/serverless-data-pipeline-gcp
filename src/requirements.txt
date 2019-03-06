@@ -4,3 +4,4 @@ google-cloud-bigquery
 pyarrow
 pandas
 pandas-gbq
+datetime
