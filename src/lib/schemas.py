@@ -47,4 +47,4 @@ schema_df = {'_comments': 'object',
 							'segmentid': 'int64', 
 							'start_lon': 'float64', 
 							'street': 'object'
-              } 
+              }
