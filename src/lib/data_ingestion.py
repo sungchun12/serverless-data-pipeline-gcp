@@ -56,7 +56,7 @@ def upload_raw_data_gcs(results_df, bucket_name):
 		bucket = storage_client.bucket(bucket_name) #capture bucket details
 		timestamp = _getToday()
 		source_file_name = 'traffic_'+ timestamp + '.gzip' #create the file name
-		temp_path = "./tmp"
+		temp_path = "/tmp"
 		os.chdir(temp_path) #change to tmp path
 		# blob.upload_from_string(results_df.to_parquet(source_file_name, engine = 'pyarrow', compression = 'gzip'),content_type='gzip')
 		results_df.to_parquet(source_file_name, engine = 'pyarrow', compression = 'gzip')
@@ -65,6 +65,7 @@ def upload_raw_data_gcs(results_df, bucket_name):
 		blob.upload_from_filename(source_file_name) #upload to bucket
 		print("Successfully uploaded parquet gzip file into {}".format(bucket))
 		#delete files from temporary folder
+		#TODO: create separate function for this
 		for file in os.listdir(temp_path):
 			file_path = os.path.join(temp_path, file)
 			if os.path.isfile(file_path):
@@ -79,25 +80,25 @@ def upload_raw_data_gcs(results_df, bucket_name):
 #http://pbpython.com/pandas_dtypes.html
     
 def convert_schema(results_df, schema_dict):
-    """Converts data types in dataframe to match BigQuery destination table"""
-    for k, v in schema_dict.items(): #for each column name in the dictionary, convert the data type in the dataframe
-        results_df[k] = results_df[k].astype(v)
-    results_df_transformed = results_df
-    print("Updated schema to match BigQuery destination table")
-    return results_df_transformed
+	"""Converts data types in dataframe to match BigQuery destination table"""
+	for k, v in schema_dict.items(): #for each column name in the dictionary, convert the data type in the dataframe
+		results_df[k] = results_df[k].astype(v)
+	results_df_transformed = results_df
+	print("Updated schema to match BigQuery destination table")
+	return results_df_transformed
 
 def check_nulls(results_df_transformed):
-    """Checks if there are any nulls in the columns"""
-    try:
-        null_columns = []
-        check_bool = results_df_transformed.isnull().any() #returns a boolean True/False for every column in dataframe if it contains nulls
-        for k, v in check_bool.items(): #for each column in check_bool having nulls, print the name of the column
-            if check_bool[v] == False:
-                null_columns.append(k)
-        print("These are the null columns: {}".format(null_columns))
-        return null_columns
-    except Exception as e:
-        print(e)
+	"""Checks if there are any nulls in the columns"""
+	try:
+		null_columns = []
+		check_bool = results_df_transformed.isnull().any() #returns a boolean True/False for every column in dataframe if it contains nulls
+		for k, v in check_bool.items(): #for each column in check_bool having nulls, print the name of the column
+			if check_bool[v] == False:
+				null_columns.append(k)
+		print("These are the null columns: {}".format(null_columns))
+		return null_columns
+	except Exception as e:
+		print(e)
 
 def check_null_outliers(null_columns, nulls_expected):
     """Checks if there are any outlier nulls in the columns"""
