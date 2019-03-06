@@ -3,6 +3,8 @@
 add description here
 
 """
+#decoding module
+import base64
 
 #lib modules
 from lib.schemas import schema_bq, schema_df
@@ -13,8 +15,16 @@ from lib.infrastructure_setup import create_bucket, create_dataset_table
 
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
 #explains why to use pubsub as middleware https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule
-def handler(schema_bq, schema_df):
-	"""Main function that orchestrates the data pipeline from start to finish"""
+def handler(event, context):
+	"""
+	Main function that orchestrates the data pipeline from start to finish.
+	Triggered from a message on a Cloud Pub/Sub topic.
+    Args:
+				event (dict): Event payload.
+				context (google.cloud.functions.Context): Metadata for the event.
+  """
+	pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+	print(pubsub_message)
 	#define project variables
 	#TODO: create a class for all these objects?
 	project_id = 'iconic-range-220603' #capture the project id to where this data will land
@@ -28,6 +38,8 @@ def handler(schema_bq, schema_df):
 	table_final_desc = "Unique, historical records accumulated from table: {}".format(table_name)
 	nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
 	partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
+	schema_bq = schema_bq #define the imported schema
+	schema_df = schema_df #define the imported schema
 
 	#setup infrastructure
 	create_bucket(bucket_name)

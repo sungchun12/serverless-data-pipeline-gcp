@@ -15,6 +15,7 @@ from sodapy import Socrata
 import pandas as pd
 
 from lib.helper_functions import _getToday
+from lib.schemas import schema_df
 
 #%%
 #create pandas dataframe
@@ -77,10 +78,9 @@ def upload_raw_data_gcs(results_df, bucket_name):
 #https://stackoverflow.com/questions/21886742/convert-pandas-dtypes-to-bigquery-type-representation
 #https://stackoverflow.com/questions/44953463/pandas-google-bigquery-schema-mismatch-makes-the-upload-fail
 #http://pbpython.com/pandas_dtypes.html
-    
+#TODO: figure out what the hell is going on here, TypeError: 'Context' object is not iterable
 def convert_schema(results_df, schema_df):
 	"""Converts data types in dataframe to match BigQuery destination table"""
-	schema_df = schema_df #define the context object
 	dict(schema_df)
 	print(schema_df)
 	for k in schema_df: #for each column name in the dictionary, convert the data type in the dataframe
