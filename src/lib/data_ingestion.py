@@ -79,9 +79,9 @@ def upload_raw_data_gcs(results_df, bucket_name):
 #https://stackoverflow.com/questions/44953463/pandas-google-bigquery-schema-mismatch-makes-the-upload-fail
 #http://pbpython.com/pandas_dtypes.html
     
-def convert_schema(results_df, schema_dict):
+def convert_schema(results_df, schema_df):
 	"""Converts data types in dataframe to match BigQuery destination table"""
-	for k, v in schema_dict.items(): #for each column name in the dictionary, convert the data type in the dataframe
+	for k, v in schema_df.items(): #for each column name in the dictionary, convert the data type in the dataframe
 		results_df[k] = results_df[k].astype(v)
 	results_df_transformed = results_df
 	print("Updated schema to match BigQuery destination table")
