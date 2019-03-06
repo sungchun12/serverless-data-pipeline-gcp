@@ -32,6 +32,7 @@ schema_bq = [
     bigquery.SchemaField('street', 'STRING', mode='NULLABLE', description='Street name of the traffic segment')
 ] 
 
+
 #apply a schema to pandas dataframe to match BigQuery for equivalent data types
 schema_df = {'_comments': 'object', 
 							'_direction': 'object', 
