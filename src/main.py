@@ -19,8 +19,8 @@ def handler(event, context):
 	Main function that orchestrates the data pipeline from start to finish.
 	Triggered from a message on a Cloud Pub/Sub topic.
     Args:
-				event (dict): Event payload.
-				context (google.cloud.functions.Context): Metadata for the event.
+			event (dict): Event payload.
+			context (google.cloud.functions.Context): Metadata for the event.
   """
 	#prints a message from the pubsub trigger
 	pubsub_message = base64.b64decode(event['data']).decode('utf-8')

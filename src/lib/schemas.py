@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 This contains the bigquery and dataframe schemas for data warehouse setup.
 Change these values for your table schemas in scope.
