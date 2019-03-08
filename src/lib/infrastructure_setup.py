@@ -17,9 +17,9 @@ def create_bucket(bucket_name):
     bucket.location = 'US-CENTRAL1' #define regional location
     if not bucket.exists(): #checks if bucket doesn't exist
         bucket.create()
-        print("Created a new bucket: {}".format(bucket))
+        print("Created a new bucket: {}".format(bucket.path))
     else:
-        print("Bucket already exists: {}".format(bucket))
+        print("Bucket already exists: {}".format(bucket.path))
 
 
 #%%
@@ -90,9 +90,9 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
     # exists within the project.
     if dataset_exists(bigquery_client, dataset_ref) == False: #checks if dataset not found
         dataset = bigquery_client.create_dataset(dataset)  # API request
-        print("Created new dataset: {}".format(dataset_ref))
+        print("Created new dataset: {}".format(dataset_ref.path))
     else:
-        print("Dataset already exists: {}".format(dataset_ref))
+        print("Dataset already exists: {}".format(dataset_ref.path))
     
     #Create an empty table
     table_ref = dataset_ref.table(table_name) #construct a full table object to send to the api
@@ -111,4 +111,4 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
         assert table.description == table_desc #checks if table description matches the update
         print("Created empty table partitioned on column: {}".format(table.time_partitioning.field))
     else:
-        print("Table already exists: {}".format(table_ref))
+        print("Table already exists: {}".format(table_ref.path))
