@@ -35,7 +35,7 @@ def bq_table_num_rows(dataset_name, table_name):
 def query_max_timestamp(project_id, dataset_name, table_name):
     """Return the max timestamp from a table in BigQuery after current date in CST"""
     #in central Chicago time
-    sql = "SELECT max(_last_updt) as max_timestamp FROM `{0}.{1}.{2}` WHERE _last_updt >= TIMESTAMP(CURRENT_DATE('-06:00'))"    .format(project_id, dataset_name, table_name)
+    sql = "SELECT max(_last_updt) as max_timestamp FROM `{0}.{1}.{2}` WHERE _last_updt >= TIMESTAMP(CURRENT_DATE('-06:00'))".format(project_id, dataset_name, table_name)
     
     bigquery_client = bigquery.Client() #setup the client
     
@@ -69,7 +69,7 @@ def query_unique_records(project_id, dataset_name, table_name, table_name_2):
         job_config.destination = table_ref
         job_config.write_disposition = 'WRITE_TRUNCATE'
         max_timestamp = query_max_timestamp(project_id, dataset_name, table_name)
-        sql = "SELECT * FROM `{0}.{1}.{2}` WHERE _last_updt >= TIMESTAMP(DATETIME '{3}');"        .format(project_id, dataset_name, table_name, max_timestamp)
+        sql = "SELECT * FROM `{0}.{1}.{2}` WHERE _last_updt >= TIMESTAMP(DATETIME '{3}');".format(project_id, dataset_name, table_name, max_timestamp)
         query_job = bigquery_client.query(
             sql,
             # Location must match that of the dataset(s) referenced in the query
