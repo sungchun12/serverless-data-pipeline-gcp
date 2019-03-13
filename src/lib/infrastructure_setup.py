@@ -21,8 +21,6 @@ def create_bucket(bucket_name):
 	else:
 		print("Bucket already exists: {}".format(bucket.path))
 
-
-#%%
 def dataset_exists(client, dataset_reference):
 	"""Return if a table exists.
 
@@ -43,8 +41,6 @@ def dataset_exists(client, dataset_reference):
 	except NotFound:
 		return False
 
-
-#%%
 def table_exists(client, table_reference):
 	"""Return if a table exists.
 
@@ -65,8 +61,6 @@ def table_exists(client, table_reference):
 	except NotFound:
 		return False
 
-
-#%%
 #https://cloud.google.com/bigquery/docs/python-client-migration#update_a_table
 def create_dataset_table(dataset_name, table_name, table_desc, schema, partition_by):
 	"""
@@ -86,8 +80,7 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
 	dataset.location = "US"
 	
 	# Send the dataset to the API for creation.
-	# Raises google.api_core.exceptions.Conflict if the Dataset already
-	# exists within the project.
+	# Raises google.api_core.exceptions.Conflict if the Dataset already exists within the project.
 	if dataset_exists(bigquery_client, dataset_ref) == False: #checks if dataset not found
 		dataset = bigquery_client.create_dataset(dataset)  # API request
 		print("Created new dataset: {}".format(dataset_ref.path))
