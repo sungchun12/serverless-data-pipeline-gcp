@@ -41,6 +41,7 @@ def handler(event, context):
 				#prints a message from the pubsub trigger
 				pubsub_message = base64.b64decode(event['data']).decode('utf-8')
 				print(pubsub_message) #can be used to configure dynamic pipeline creation
+
 		with span_get_kpis.span(name='infrastructure_var_setup'):
 				#TODO: create a class for all these objects? yes
 				#https://dbader.org/blog/6-things-youre-missing-out-on-by-never-using-classes-in-your-python-code
@@ -56,6 +57,7 @@ def handler(event, context):
 				nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
 				partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
 				from lib.schemas import schema_bq, schema_df #import schemas
+
 		with span_get_kpis.span(name='infrastructure_creation') as span_infra_create:
 				#create infrastructure
 				with span_infra_create.span(name='bucket_creation'):
@@ -65,10 +67,14 @@ def handler(event, context):
 						create_dataset_table(dataset_name, table_staging, table_staging_desc, schema_bq, partition_by) #create a table for unique records staging
 						create_dataset_table(dataset_name, table_final, table_final_desc, schema_bq, partition_by) #create a table for unique records final
 
-				#access data from API, create dataframe, and upload raw csv
-				results_df = create_results_df()
-				upload_raw_data_gcs(results_df, bucket_name)
+		with span_get_kpis.span(name='ingest_raw_data') as span_ingest_raw:
+				with span_ingest_raw.span(name='create_dataframe'):
+						#access data from API, create dataframe, and upload raw csv
+						results_df = create_results_df()
+				with span_ingest_raw.span(name='upload_raw_data_gcs'):
+						upload_raw_data_gcs(results_df, bucket_name)
 
+		with span_get_kpis.span(name='convert_schema'):
 				#perform schema conversion on dataframe to match bigquery schema
 				results_df_transformed = convert_schema(results_df, schema_df)
 				print(results_df_transformed.dtypes)
