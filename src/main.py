@@ -4,6 +4,7 @@ add description here
 
 """
 #opencensus modules to trace function performance
+#https://opencensus.io/exporters/supported-exporters/python/stackdriver/
 import opencensus
 from opencensus.trace import tracer as tracer_module
 from opencensus.trace.exporters import stackdriver_exporter
@@ -40,7 +41,7 @@ def handler(event, context):
 				#prints a message from the pubsub trigger
 				pubsub_message = base64.b64decode(event['data']).decode('utf-8')
 				print(pubsub_message) #can be used to configure dynamic pipeline creation
-
+		with span_get_kpis.span(name='infrastructure_var_setup'):
 				#TODO: create a class for all these objects? yes
 				#https://dbader.org/blog/6-things-youre-missing-out-on-by-never-using-classes-in-your-python-code
 				#define infrastructure variables
@@ -55,12 +56,14 @@ def handler(event, context):
 				nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
 				partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
 				from lib.schemas import schema_bq, schema_df #import schemas
-
-				#setup infrastructure
-				create_bucket(bucket_name)
-				create_dataset_table(dataset_name, table_name, table_desc, schema_bq, partition_by) #create raw table
-				create_dataset_table(dataset_name, table_staging, table_staging_desc, schema_bq, partition_by) #create a table for unique records staging
-				create_dataset_table(dataset_name, table_final, table_final_desc, schema_bq, partition_by) #create a table for unique records final
+		with span_get_kpis.span(name='infrastructure_creation') as span_infra_create:
+				#create infrastructure
+				with span_infra_create.span(name='bucket_creation'):
+						create_bucket(bucket_name)
+				with span_infra_create.span(name='dataset_table_creation'):
+						create_dataset_table(dataset_name, table_name, table_desc, schema_bq, partition_by) #create raw table
+						create_dataset_table(dataset_name, table_staging, table_staging_desc, schema_bq, partition_by) #create a table for unique records staging
+						create_dataset_table(dataset_name, table_final, table_final_desc, schema_bq, partition_by) #create a table for unique records final
 
 				#access data from API, create dataframe, and upload raw csv
 				results_df = create_results_df()
