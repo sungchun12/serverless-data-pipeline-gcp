@@ -6,12 +6,6 @@ Add a description here
 #gcp modules
 from google.cloud import bigquery
 
-
-#get record count in raw table
-# from google.cloud import bigquery
-# client = bigquery.Client()
-# dataset_id = 'my_dataset'
-# table_id = 'my_table'
 def bq_table_num_rows(dataset_name, table_name):
 	"""Print total number of rows in destination bigquery table"""
 	bigquery_client = bigquery.Client() #instantiate bigquery client to interact with api
@@ -33,13 +27,6 @@ def query_max_timestamp(project_id, dataset_name, table_name):
 		max_timestamp = row.max_timestamp.strftime('%Y-%m-%d %H:%M:%S')
 		return max_timestamp
 
-
-#query unique records and append to unique records table
-#Figure out how to query a table with python and append results
-#-it works only in first try into empty table and then errors out if table already exists
-#for this query to append, I need a union statement
-#this function can only workf or the first time
-#CURRENT_DATE('-06:00')
 # https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#methods
 # https://googleapis.github.io/google-cloud-python/latest/bigquery/generated/google.cloud.bigquery.job.QueryJobConfig.html#google.cloud.bigquery.job.QueryJobConfig
 # The following values are supported: 
@@ -65,10 +52,8 @@ def query_unique_records(project_id, dataset_name, table_name, table_name_2):
 	query_job.result()
 	print('Query results loaded to table {}'.format(table_ref.path))
 
-
 def append_unique_records(project_id, dataset_name, table_name, table_name_2):
 	"""Queries unique staging table and appends new results onto final table"""
-
 	bigquery_client = bigquery.Client()
 	job_config = bigquery.QueryJobConfig()
 	table_ref = bigquery_client.dataset(dataset_name).table(table_name_2) #set destination table
