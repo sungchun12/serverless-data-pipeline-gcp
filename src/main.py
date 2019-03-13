@@ -71,6 +71,3 @@ def handler(event, context):
 	append_unique_records(project_id, dataset_name, table_staging, table_final)
 	bq_table_num_rows(dataset_name, table_final)
 	print("DONE!")
-
-	#response body for api request
-	# return f'Uploaded raw csv file to bucket: {0}, and appended data to BigQuery dataset: {1}, table: {2} on '.format(bucket_name,dataset_name,table_name) + _getToday() TODO: this will be the response from the api
