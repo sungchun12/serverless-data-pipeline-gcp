@@ -10,11 +10,6 @@ from opencensus.trace.exporters import stackdriver_exporter
 from opencensus.trace.exporters.transports.background_thread \
     import BackgroundThreadTransport
 
-# instantiate trace exporter
-PROJECT_ID = 'iconic-range-220603' #capture the project id to where this data will land
-exporter = stackdriver_exporter.StackdriverExporter(
-    project_id=PROJECT_ID, transport=BackgroundThreadTransport)
-
 #decoding module for pubsub
 import base64
 
@@ -35,53 +30,57 @@ def handler(event, context):
 				event (dict): Event payload.
 				context (google.cloud.functions.Context): Metadata for the event.
 		"""
+		# instantiate trace exporter
+		project_id = 'iconic-range-220603' #capture the project id to where this data will land
+		exporter = stackdriver_exporter.StackdriverExporter(
+    		project_id=project_id, transport=BackgroundThreadTransport)
 		# instantiate tracer
 		tracer = tracer_module.Tracer(exporter=exporter)
-		#prints a message from the pubsub trigger
-		pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-		print(pubsub_message) #can be used to configure dynamic pipeline creation
+		with tracer.span(name='get_kpis') as span_get_kpis:
+				#prints a message from the pubsub trigger
+				pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+				print(pubsub_message) #can be used to configure dynamic pipeline creation
 
-		#TODO: create a class for all these objects? yes
-		#https://dbader.org/blog/6-things-youre-missing-out-on-by-never-using-classes-in-your-python-code
-		#define project variables
-		project_id = 'iconic-range-220603' #capture the project id to where this data will land
-		bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
-		dataset_name = 'chicago_traffic_demo' #initial dataset
-		table_name = 'traffic_raw' #name of table to capture data
-		table_desc = 'Raw, public Chicago traffic data is appended to this table every 5 minutes'#table description
-		table_staging = 'traffic_staging'
-		table_staging_desc = "Unique records greater than or equal to current date from table: {}".format(table_name)
-		table_final = 'traffic_final'
-		table_final_desc = "Unique, historical records accumulated from table: {}".format(table_name)
-		nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
-		partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
-		from lib.schemas import schema_bq, schema_df #import schemas
+				#TODO: create a class for all these objects? yes
+				#https://dbader.org/blog/6-things-youre-missing-out-on-by-never-using-classes-in-your-python-code
+				#define infrastructure variables
+				bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
+				dataset_name = 'chicago_traffic_demo' #initial dataset
+				table_name = 'traffic_raw' #name of table to capture data
+				table_desc = 'Raw, public Chicago traffic data is appended to this table every 5 minutes'#table description
+				table_staging = 'traffic_staging'
+				table_staging_desc = "Unique records greater than or equal to current date from table: {}".format(table_name)
+				table_final = 'traffic_final'
+				table_final_desc = "Unique, historical records accumulated from table: {}".format(table_name)
+				nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
+				partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
+				from lib.schemas import schema_bq, schema_df #import schemas
 
-		#setup infrastructure
-		create_bucket(bucket_name)
-		create_dataset_table(dataset_name, table_name, table_desc, schema_bq, partition_by) #create raw table
-		create_dataset_table(dataset_name, table_staging, table_staging_desc, schema_bq, partition_by) #create a table for unique records staging
-		create_dataset_table(dataset_name, table_final, table_final_desc, schema_bq, partition_by) #create a table for unique records final
+				#setup infrastructure
+				create_bucket(bucket_name)
+				create_dataset_table(dataset_name, table_name, table_desc, schema_bq, partition_by) #create raw table
+				create_dataset_table(dataset_name, table_staging, table_staging_desc, schema_bq, partition_by) #create a table for unique records staging
+				create_dataset_table(dataset_name, table_final, table_final_desc, schema_bq, partition_by) #create a table for unique records final
 
-		#access data from API, create dataframe, and upload raw csv
-		results_df = create_results_df()
-		upload_raw_data_gcs(results_df, bucket_name)
+				#access data from API, create dataframe, and upload raw csv
+				results_df = create_results_df()
+				upload_raw_data_gcs(results_df, bucket_name)
 
-		#perform schema conversion on dataframe to match bigquery schema
-		results_df_transformed = convert_schema(results_df, schema_df)
-		print(results_df_transformed.dtypes)
+				#perform schema conversion on dataframe to match bigquery schema
+				results_df_transformed = convert_schema(results_df, schema_df)
+				print(results_df_transformed.dtypes)
 
-		#check if there are any nulls in the columns and print exceptions
-		null_columns = check_nulls(results_df_transformed)
-		null_outliers = check_null_outliers(null_columns, nulls_expected)
+				#check if there are any nulls in the columns and print exceptions
+				null_columns = check_nulls(results_df_transformed)
+				null_outliers = check_null_outliers(null_columns, nulls_expected)
 
-		#upload data to bigquery
-		upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name)
-		bq_table_num_rows(dataset_name, table_name)
+				#upload data to bigquery
+				upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name)
+				bq_table_num_rows(dataset_name, table_name)
 
-		#Preprocess data for unique records accumulation
-		query_unique_records(project_id, dataset_name, table_name, table_staging)
-		bq_table_num_rows(dataset_name, table_staging)
-		append_unique_records(project_id, dataset_name, table_staging, table_final)
-		bq_table_num_rows(dataset_name, table_final)
-		print("Data Pipeline Fully Realized!")
+				#Preprocess data for unique records accumulation
+				query_unique_records(project_id, dataset_name, table_name, table_staging)
+				bq_table_num_rows(dataset_name, table_staging)
+				append_unique_records(project_id, dataset_name, table_staging, table_final)
+				bq_table_num_rows(dataset_name, table_final)
+				print("Data Pipeline Fully Realized!")
