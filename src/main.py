@@ -3,6 +3,18 @@
 add description here
 
 """
+#opencensus modules to trace function performance
+import opencensus
+from opencensus.trace import tracer as tracer_module
+from opencensus.trace.exporters import stackdriver_exporter
+from opencensus.trace.exporters.transports.background_thread \
+    import BackgroundThreadTransport
+
+# instantiate trace exporter
+PROJECT_ID = 'iconic-range-220603' #capture the project id to where this data will land
+exporter = stackdriver_exporter.StackdriverExporter(
+    project_id=PROJECT_ID, transport=BackgroundThreadTransport)
+
 #decoding module for pubsub
 import base64
 
@@ -23,6 +35,8 @@ def handler(event, context):
 				event (dict): Event payload.
 				context (google.cloud.functions.Context): Metadata for the event.
 		"""
+		# instantiate tracer
+		tracer = tracer_module.Tracer(exporter=exporter)
 		#prints a message from the pubsub trigger
 		pubsub_message = base64.b64decode(event['data']).decode('utf-8')
 		print(pubsub_message) #can be used to configure dynamic pipeline creation
