@@ -27,7 +27,8 @@ def handler(event, context):
 	print(pubsub_message)
 
 	#define project variables
-	#TODO: create a class for all these objects?
+	#TODO: create a class for all these objects? yes
+	#https://dbader.org/blog/6-things-youre-missing-out-on-by-never-using-classes-in-your-python-code
 	project_id = 'iconic-range-220603' #capture the project id to where this data will land
 	bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
 	dataset_name = 'chicago_traffic_demo' #initial dataset
