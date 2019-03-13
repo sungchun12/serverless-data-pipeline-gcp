@@ -18,17 +18,18 @@ def handler(event, context):
 	"""
 	Main function that orchestrates the data pipeline from start to finish.
 	Triggered from a message on a Cloud Pub/Sub topic.
-    Args:
+
+	Args:
 			event (dict): Event payload.
 			context (google.cloud.functions.Context): Metadata for the event.
-  """
+	"""
 	#prints a message from the pubsub trigger
 	pubsub_message = base64.b64decode(event['data']).decode('utf-8')
-	print(pubsub_message)
+	print(pubsub_message) #can be used to configure dynamic pipeline creation
 
-	#define project variables
 	#TODO: create a class for all these objects? yes
 	#https://dbader.org/blog/6-things-youre-missing-out-on-by-never-using-classes-in-your-python-code
+	#define project variables
 	project_id = 'iconic-range-220603' #capture the project id to where this data will land
 	bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
 	dataset_name = 'chicago_traffic_demo' #initial dataset
@@ -70,4 +71,4 @@ def handler(event, context):
 	bq_table_num_rows(dataset_name, table_staging)
 	append_unique_records(project_id, dataset_name, table_staging, table_final)
 	bq_table_num_rows(dataset_name, table_final)
-	print("DONE!")
+	print("Data Pipeline Fully Realized!")
