@@ -75,7 +75,6 @@ def convert_schema(results_df, schema_df):
 	print("Updated schema to match BigQuery destination table")
 	return results_df_transformed
 
-#TODO: class for null operations to dataframe
 def check_nulls(results_df_transformed):
 	"""Checks if there are any nulls in the columns"""
 	null_columns = []

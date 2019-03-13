@@ -49,7 +49,7 @@ def handler(event, context):
 	create_dataset_table(dataset_name, table_staging, table_staging_desc, schema_bq, partition_by) #create a table for unique records staging
 	create_dataset_table(dataset_name, table_final, table_final_desc, schema_bq, partition_by) #create a table for unique records final
 
-	#access data from API and create dataframe then upload raw csv
+	#access data from API, create dataframe, and upload raw csv
 	results_df = create_results_df()
 	upload_raw_data_gcs(results_df, bucket_name)
 
@@ -57,8 +57,7 @@ def handler(event, context):
 	results_df_transformed = convert_schema(results_df, schema_df)
 	print(results_df_transformed.dtypes)
 
-	#check if there are any nulls in the columns except for _comments
-	#TODO: these will be added later to the response body
+	#check if there are any nulls in the columns and print exceptions
 	null_columns = check_nulls(results_df_transformed)
 	null_outliers = check_null_outliers(null_columns, nulls_expected)
 
