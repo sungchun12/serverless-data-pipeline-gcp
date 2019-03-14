@@ -57,12 +57,26 @@ def upload_raw_data_gcs(results_df, bucket_name):
 		blob = bucket.blob(source_file_name) #define the binary large object(blob)
 		blob.upload_from_filename(source_file_name) #upload to bucket
 		print("Successfully uploaded parquet gzip file into {}".format(bucket))
-		#delete files from temporary folder
-		#TODO: create separate function for this
+		delete_temp_dir()
+
+
+def delete_temp_dir():
+		"""Deletes every file in the /tmp directory to minimize memory load during function execution"""
+		#check what's in the temporary directory
+		temp_path = "/tmp"
+		print(os.listdir(temp_path))
+		#delete all files in the temporary path if they exist
+		print("Deleting all files in {} directory".format(temp_path))
 		for file in os.listdir(temp_path):
 				file_path = os.path.join(temp_path, file)
 				if os.path.isfile(file_path):
 						os.unlink(file_path)
+		#check that the temporary directory is empty
+		if len(os.listdir(temp_path)) == 0:
+				print("{} directory is empty".format(temp_path))
+		else:
+				print("{} directory is NOT empty".format(temp_path))
+
 
 #https://stackoverflow.com/questions/21886742/convert-pandas-dtypes-to-bigquery-type-representation
 #https://stackoverflow.com/questions/44953463/pandas-google-bigquery-schema-mismatch-makes-the-upload-fail
