@@ -9,7 +9,7 @@ import opencensus
 from opencensus.trace import tracer as tracer_module
 from opencensus.trace.exporters import stackdriver_exporter
 from opencensus.trace.exporters.transports.background_thread \
-    import BackgroundThreadTransport
+		import BackgroundThreadTransport
 
 #decoding module for pubsub
 import base64
@@ -34,7 +34,7 @@ def handler(event, context):
 		# instantiate trace exporter
 		project_id = 'iconic-range-220603' #capture the project id to where this data will land
 		exporter = stackdriver_exporter.StackdriverExporter(
-    		project_id=project_id, transport=BackgroundThreadTransport)
+				project_id=project_id, transport=BackgroundThreadTransport)
 		# instantiate tracer
 		tracer = tracer_module.Tracer(exporter=exporter)
 
