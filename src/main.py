@@ -3,6 +3,19 @@
 add description here
 
 """
+import logging, sys
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s:%(message)s')
+
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setFormatter(formatter)
+
+logger.addHandler(stream_handler)
+# logger.addFilter()
+
 #opencensus modules to trace function performance
 #https://opencensus.io/exporters/supported-exporters/python/stackdriver/
 import opencensus
@@ -98,4 +111,4 @@ def handler(event, context):
 						with span_prep_data.span(name='append_unique_records'):
 								append_unique_records(project_id, dataset_name, table_staging, table_final)
 								bq_table_num_rows(dataset_name, table_final)
-						print("Data Pipeline Fully Realized!")
+				logger.info("Data Pipeline Fully Realized!")
