@@ -2,6 +2,17 @@
 """
 Add a description here
 """
+import logging, sys
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s:%(message)s')
+
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setFormatter(formatter)
+
+logger.addHandler(stream_handler)
 
 #built in python modules
 import os
@@ -28,11 +39,11 @@ def create_results_df():
 
 				# Convert to pandas DataFrame
 				results_df = pd.DataFrame.from_records(results)
-				print("Successfully created a pandas dataframe!")
+				logger.info("Successfully created a pandas dataframe!")
 				
 				return results_df
 		except Exception as e:
-				print("Failure to create a pandas dataframe :(")
+				logger.error("Failure to create a pandas dataframe :(")
 				raise e
 
 # GZIP compression uses more CPU resources than Snappy or LZO, but provides a higher compression ratio. 
@@ -56,7 +67,7 @@ def upload_raw_data_gcs(results_df, bucket_name):
 		# blob = bucket.blob(os.path.basename(source_file_name)) #define the path to the file
 		blob = bucket.blob(source_file_name) #define the binary large object(blob)
 		blob.upload_from_filename(source_file_name) #upload to bucket
-		print("Successfully uploaded parquet gzip file into {}".format(bucket))
+		logger.info(f"Successfully uploaded parquet gzip file into: {bucket}")
 		delete_temp_dir()
 
 
@@ -64,18 +75,18 @@ def delete_temp_dir():
 		"""Deletes every file in the /tmp directory to minimize memory load during function execution"""
 		#check what's in the temporary directory
 		temp_path = "/tmp"
-		print(os.listdir(temp_path))
+		logger.info(os.listdir(temp_path))
 		#delete all files in the temporary path if they exist
-		print("Deleting all files in {} directory".format(temp_path))
+		logger.info(f"Deleting all files in {temp_path} directory")
 		for file in os.listdir(temp_path):
 				file_path = os.path.join(temp_path, file)
 				if os.path.isfile(file_path):
 						os.unlink(file_path)
 		#check that the temporary directory is empty
 		if len(os.listdir(temp_path)) == 0:
-				print("{} directory is empty".format(temp_path))
+				logger.info(f"{temp_path} directory is empty")
 		else:
-				print("{} directory is NOT empty".format(temp_path))
+				logger.warning(f"{temp_path} directory is NOT empty")
 
 
 #https://stackoverflow.com/questions/21886742/convert-pandas-dtypes-to-bigquery-type-representation
@@ -86,7 +97,7 @@ def convert_schema(results_df, schema_df):
 		for k, v in schema_df.items(): #for each column name in the dictionary, convert the data type in the dataframe
 				results_df[k] = results_df[k].astype(v)
 		results_df_transformed = results_df
-		print("Updated schema to match BigQuery destination table")
+		logger.info("Updated schema to match BigQuery destination table")
 		return results_df_transformed
 
 def check_nulls(results_df_transformed):
@@ -96,7 +107,7 @@ def check_nulls(results_df_transformed):
 		for k, v in check_bool.items(): #for each column in check_bool having nulls, print the name of the column
 				if check_bool[v] == False:
 						null_columns.append(k)
-		print("These are the null columns: {}".format(null_columns))
+		logger.info(f"These are the null columns: {null_columns}")
 		return null_columns
 
 def check_null_outliers(null_columns, nulls_expected):
@@ -105,7 +116,7 @@ def check_null_outliers(null_columns, nulls_expected):
 		#if any columns in the nulls expected mismatch the nulls collected, append to null_outliers
 		if any(x not in nulls_expected for x in null_columns): 
 				null_outliers.append(x)
-		print("These are the outlier null columns: {}".format(null_outliers))
+		print(f"These are the outlier null columns: {null_outliers}")
 		return null_outliers
 
 #figure out the nullable vs. required mode schema mismatch
@@ -125,4 +136,4 @@ def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
 		# bigquery_client.load_table_from_dataframe(results_df_transformed, table_ref, num_retries = 5, job_config = job_config).result() 
 		gbq.to_gbq(results_df_transformed, dataset_name+"."+table_name, project_id, 
 								if_exists='append', location = 'US', progress_bar=True)
-		print('Data uploaded into: {}'.format(table_ref.path))
+		print(f"Data uploaded into: {table_ref.path}")
