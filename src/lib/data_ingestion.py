@@ -107,7 +107,7 @@ def check_null_outliers(null_columns, nulls_expected):
 		#if any columns in the nulls expected mismatch the nulls collected, append to null_outliers
 		if any(x not in nulls_expected for x in null_columns): 
 				null_outliers.append(x)
-		print(f"These are the outlier null columns: {null_outliers}")
+		logger.info(f"These are the outlier null columns: {null_outliers}")
 		return null_outliers
 
 #figure out the nullable vs. required mode schema mismatch
@@ -127,4 +127,4 @@ def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
 		# bigquery_client.load_table_from_dataframe(results_df_transformed, table_ref, num_retries = 5, job_config = job_config).result() 
 		gbq.to_gbq(results_df_transformed, dataset_name+"."+table_name, project_id, 
 								if_exists='append', location = 'US', progress_bar=True)
-		print(f"Data uploaded into: {table_ref.path}")
+		logger.info(f"Data uploaded into: {table_ref.path}")
