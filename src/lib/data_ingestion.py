@@ -2,8 +2,6 @@
 """
 Add a description here
 """
-#import logging
-from lib.helper_functions import logger
 
 #built in python modules
 import os
@@ -16,7 +14,7 @@ from sodapy import Socrata
 #pandas dataframe module
 import pandas as pd
 
-from lib.helper_functions import _getToday
+from lib.helper_functions import _getToday, logger
 
 def create_results_df():
 		"""Create a dataframe based on JSON from the Chicago traffic API"""
