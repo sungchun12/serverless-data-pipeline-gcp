@@ -12,7 +12,7 @@ def _getToday():
 		"""Returns timestamp string"""
 		return datetime.now().strftime('%Y%m%d%H%M%S')
 
-def set_logger():
+def set_logger(__name__):
 		"""Configures logger for all modules and returns logger object"""
 		logger = logging.getLogger(__name__)
 		logger.setLevel(logging.INFO)
@@ -24,5 +24,3 @@ def set_logger():
 
 		logger.addHandler(stream_handler)
 		return logger
-
-logger = set_logger()

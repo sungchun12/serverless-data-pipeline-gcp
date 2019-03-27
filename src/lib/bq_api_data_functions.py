@@ -3,7 +3,9 @@
 Add a description here
 """
 #import logging
-from lib.helper_functions import logger
+from lib.helper_functions import set_logger
+
+logger = set_logger(__name__)
 
 #gcp modules
 from google.cloud import bigquery

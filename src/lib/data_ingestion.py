@@ -14,7 +14,8 @@ from sodapy import Socrata
 #pandas dataframe module
 import pandas as pd
 
-from lib.helper_functions import _getToday, logger
+from lib.helper_functions import _getToday, set_logger
+logger = set_logger(__name__)
 
 def create_results_df():
 		"""Create a dataframe based on JSON from the Chicago traffic API"""
