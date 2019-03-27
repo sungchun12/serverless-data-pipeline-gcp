@@ -12,7 +12,8 @@ gcloud pubsub topics publish test_topic --message "Can you see this?"
 #check logs
 gcloud functions logs read --limit 50
 
-#deploy cloud scheduler job to run every 5 minutes to test functio
+#deploy cloud scheduler job to run every 5 minutes to test function
+#bash syntax
 gcloud beta scheduler jobs create pubsub scheduled-function \
 	--schedule "*/5 * * * *" \
 	--topic test_topic \
