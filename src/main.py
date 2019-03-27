@@ -3,19 +3,6 @@
 add description here
 
 """
-import logging, sys
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-formatter = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s:%(message)s')
-
-stream_handler = logging.StreamHandler(sys.stdout)
-stream_handler.setFormatter(formatter)
-
-logger.addHandler(stream_handler)
-# logger.addFilter()
-
 #opencensus modules to trace function performance
 #https://opencensus.io/exporters/supported-exporters/python/stackdriver/
 import opencensus
@@ -31,6 +18,7 @@ import base64
 from lib.bq_api_data_functions import bq_table_num_rows, query_unique_records, append_unique_records
 from lib.data_ingestion import create_results_df, upload_raw_data_gcs, convert_schema, check_nulls, check_null_outliers, upload_to_gbq
 from lib.infrastructure_setup import create_bucket, create_dataset_table
+from lib.helper_functions import logger
 #TODO: add in logging: https://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/
 
 #may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
