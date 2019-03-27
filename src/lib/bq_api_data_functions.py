@@ -2,6 +2,17 @@
 """
 Add a description here
 """
+import logging, sys
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s:%(message)s')
+
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setFormatter(formatter)
+
+logger.addHandler(stream_handler)
 
 #gcp modules
 from google.cloud import bigquery
@@ -13,13 +24,13 @@ def bq_table_num_rows(dataset_name, table_name):
 		table_ref = dataset_ref.table(table_name) #create table object 
 		table = bigquery_client.get_table(table_ref)  # API Request
 		num_rows = table.num_rows
-		print("Total number of rows: {0} in {1}".format(table.num_rows, table_ref.path))
+		logger.info(f"Total number of rows: {table.num_rows} in {table_ref.path}")
 		return num_rows
 
 def query_max_timestamp(project_id, dataset_name, table_name):
 		"""Return the max timestamp from a table in bigquery after current date in CST"""
 		#in central Chicago time
-		sql = "SELECT max(_last_updt) as max_timestamp FROM `{0}.{1}.{2}` WHERE _last_updt >= TIMESTAMP(CURRENT_DATE('-06:00'))".format(project_id, dataset_name, table_name)
+		sql = f"SELECT max(_last_updt) as max_timestamp FROM `{project_id}.{dataset_name}.{table_name}` WHERE _last_updt >= TIMESTAMP(CURRENT_DATE('-06:00'))"
 		bigquery_client = bigquery.Client() #setup the client
 		query_job = bigquery_client.query(sql) #run the query
 		results = query_job.result() # waits for job to complete
@@ -42,7 +53,7 @@ def query_unique_records(project_id, dataset_name, table_name, table_name_2):
 		job_config.destination = table_ref
 		job_config.write_disposition = 'WRITE_TRUNCATE'
 		max_timestamp = query_max_timestamp(project_id, dataset_name, table_name)
-		sql = "SELECT * FROM `{0}.{1}.{2}` WHERE _last_updt >= TIMESTAMP(DATETIME '{3}');".format(project_id, dataset_name, table_name, max_timestamp)
+		sql = f"SELECT * FROM `{project_id}.{dataset_name}.{table_name}` WHERE _last_updt >= TIMESTAMP(DATETIME '{max_timestamp}');"
 		query_job = bigquery_client.query(
 				sql,
 				# Location must match that of the dataset(s) referenced in the query
@@ -50,7 +61,7 @@ def query_unique_records(project_id, dataset_name, table_name, table_name_2):
 				location='US',
 				job_config=job_config)  # API request - starts the query
 		query_job.result()
-		print('Query results loaded to table {}'.format(table_ref.path))
+		logger.info(f"Query results loaded to table {table_ref.path}")
 
 def append_unique_records(project_id, dataset_name, table_name, table_name_2):
 		"""Queries unique staging table and appends new results onto final table"""
@@ -59,7 +70,7 @@ def append_unique_records(project_id, dataset_name, table_name, table_name_2):
 		table_ref = bigquery_client.dataset(dataset_name).table(table_name_2) #set destination table
 		job_config.destination = table_ref
 		job_config.write_disposition = 'WRITE_APPEND'
-		sql = "SELECT a.* FROM `{0}.{1}.{2}` a LEFT JOIN `{0}.{1}.{3}` b on a.segmentid = b.segmentid AND a._last_updt = b._last_updt WHERE b.segmentid IS NULL AND b._last_updt IS NULL;".format(project_id, dataset_name, table_name, table_name_2)
+		sql = f"SELECT a.* FROM `{project_id}.{dataset_name}.{table_name}` a LEFT JOIN `{project_id}.{dataset_name}.{table_name_2}` b on a.segmentid = b.segmentid AND a._last_updt = b._last_updt WHERE b.segmentid IS NULL AND b._last_updt IS NULL;"
 		query_job = bigquery_client.query(
 				sql,
 				# Location must match that of the dataset(s) referenced in the query
@@ -67,4 +78,4 @@ def append_unique_records(project_id, dataset_name, table_name, table_name_2):
 				location='US',
 				job_config=job_config)  # API request - starts the query
 		query_job.result()
-		print('Query results loaded to table {}'.format(table_ref.path))
+		logger.info(f"Query results loaded to table {table_ref.path}")
