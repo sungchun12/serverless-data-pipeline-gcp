@@ -2,6 +2,17 @@
 """
 Add a description here
 """
+import logging, sys
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s:%(message)s')
+
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setFormatter(formatter)
+
+logger.addHandler(stream_handler)
 
 #gcp modules
 from google.cloud import storage
@@ -17,9 +28,9 @@ def create_bucket(bucket_name):
 		bucket.location = 'US-CENTRAL1' #define regional location
 		if not bucket.exists(): #checks if bucket doesn't exist
 				bucket.create()
-				print("Created a new bucket: {}".format(bucket.path))
+				logger.info(f"Created a new bucket: {bucket.path}")
 		else:
-				print("Bucket already exists: {}".format(bucket.path))
+				logger.info(f"Bucket already exists: {bucket.path}")
 
 def dataset_exists(client, dataset_reference):
 		"""Return if a table exists.
@@ -83,9 +94,9 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
 		# Raises google.api_core.exceptions.Conflict if the Dataset already exists within the project.
 		if dataset_exists(bigquery_client, dataset_ref) == False: #checks if dataset not found
 				dataset = bigquery_client.create_dataset(dataset)  # API request
-				print("Created new dataset: {}".format(dataset_ref.path))
+				logger.info(f"Created new dataset: {dataset_ref.path}")
 		else:
-				print("Dataset already exists: {}".format(dataset_ref.path))
+				logger.info(f"Dataset already exists: {dataset_ref.path}")
 		
 		#Create an empty table
 		table_ref = dataset_ref.table(table_name) #construct a full table object to send to the api
@@ -102,6 +113,6 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
 				table.description = table_desc
 				table = bigquery_client.update_table(table, ['description'])  # API request
 				assert table.description == table_desc #checks if table description matches the update
-				print("Created empty table partitioned on column: {}".format(table.time_partitioning.field))
+				logger.info(f"Created empty table partitioned on column: {table.time_partitioning.field}")
 		else:
-				print("Table already exists: {}".format(table_ref.path))
+				logger.info(f"Table already exists: {table_ref.path}")
