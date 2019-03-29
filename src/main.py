@@ -35,6 +35,7 @@ from lib.helper_functions import set_logger
 logger = set_logger(__name__)
 # TODO: add in logging: https://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/
 
+
 # may want to define bigquery client, dataset_ref, and table_ref earlier in the handler function to avoid redundant code
 # explains why to use pubsub as middleware https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule
 def handler(event, context):
