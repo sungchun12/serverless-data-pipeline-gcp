@@ -2,14 +2,15 @@
 """
 Add a description here
 """
+# gcp modules
+from google.cloud import storage
+from google.cloud import bigquery
 
 # import logging
 from lib.helper_functions import set_logger
 
 logger = set_logger(__name__)
-# gcp modules
-from google.cloud import storage
-from google.cloud import bigquery
+
 
 # TODO: create a method where a service account is explicitly
 # authorized to create a cloud function vs. using my local service account file
@@ -93,7 +94,7 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
     # Send the dataset to the API for creation.
     # Raises google.api_core.exceptions.Conflict if the Dataset already exists within the project.
     if (
-        dataset_exists(bigquery_client, dataset_ref) == False
+        dataset_exists(bigquery_client, dataset_ref) is False
     ):  # checks if dataset not found
         dataset = bigquery_client.create_dataset(dataset)  # API request
         logger.info(f"Created new dataset: {dataset_ref.path}")
@@ -105,7 +106,7 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
         table_name
     )  # construct a full table object to send to the api
 
-    if table_exists(bigquery_client, table_ref) == False:  # checks if table not found
+    if table_exists(bigquery_client, table_ref) is False:  # checks if table not found
         table = bigquery.Table(table_ref, schema=schema)
         table.time_partitioning = bigquery.TimePartitioning(
             type_=bigquery.TimePartitioningType.DAY,  # day is the only supported type for now
