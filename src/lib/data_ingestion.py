@@ -116,7 +116,7 @@ def check_nulls(results_df_transformed):
     ) in (
         check_bool.items()
     ):  # for each column in check_bool having nulls, print the name of the column
-        if check_bool[v] == False:
+        if check_bool[v] is False:
             null_columns.append(k)
     logger.info(f"These are the null columns: {null_columns}")
     return null_columns
