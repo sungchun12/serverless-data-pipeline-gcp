@@ -51,12 +51,12 @@ def handler(event, context):
 						#define infrastructure variables
 						bucket_name = 'chicago_traffic_raw' #capture bucket name where raw data will be stored
 						dataset_name = 'chicago_traffic_demo' #initial dataset
-						table_name = 'traffic_raw' #name of table to capture data
+						table_raw = 'traffic_raw' #name of table to capture data
 						table_desc = 'Raw, public Chicago traffic data is appended to this table every 5 minutes'#table description
 						table_staging = 'traffic_staging'
-						table_staging_desc = "Unique records greater than or equal to current date from table: {}".format(table_name)
+						table_staging_desc = "Unique records greater than or equal to current date from table: {}".format(table_raw)
 						table_final = 'traffic_final'
-						table_final_desc = "Unique, historical records accumulated from table: {}".format(table_name)
+						table_final_desc = "Unique, historical records accumulated from table: {}".format(table_raw)
 						nulls_expected = ('_comments') #tuple of nulls expected for checking data outliers
 						partition_by = '_last_updt' #partition by the last updated field for faster querying and incremental loads
 						from lib.schemas import schema_bq, schema_df #import schemas
@@ -66,7 +66,7 @@ def handler(event, context):
 						with span_infra_create.span(name='bucket_creation'):
 								create_bucket(bucket_name)
 						with span_infra_create.span(name='dataset_table_creation'):
-								create_dataset_table(dataset_name, table_name, table_desc, schema_bq, partition_by) #create raw table
+								create_dataset_table(dataset_name, table_raw, table_desc, schema_bq, partition_by) #create raw table
 								create_dataset_table(dataset_name, table_staging, table_staging_desc, schema_bq, partition_by) #create a table for unique records staging
 								create_dataset_table(dataset_name, table_final, table_final_desc, schema_bq, partition_by) #create a table for unique records final
 
@@ -89,13 +89,13 @@ def handler(event, context):
 
 				with span_get_kpis.span(name='upload_to_gbq'):
 						#upload data to bigquery
-						upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name)
-						bq_table_num_rows(dataset_name, table_name)
+						upload_to_gbq(results_df_transformed, project_id, dataset_name, table_raw)
+						bq_table_num_rows(dataset_name, table_raw)
 
 				with span_get_kpis.span(name='preprocess_data') as span_prep_data:
 						#Preprocess data for unique records accumulation
 						with span_prep_data.span(name='query_unique_records'):
-								query_unique_records(project_id, dataset_name, table_name, table_staging)
+								query_unique_records(project_id, dataset_name, table_raw, table_staging)
 								bq_table_num_rows(dataset_name, table_staging)
 						with span_prep_data.span(name='append_unique_records'):
 								append_unique_records(project_id, dataset_name, table_staging, table_final)
