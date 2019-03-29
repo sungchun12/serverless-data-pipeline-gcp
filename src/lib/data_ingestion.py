@@ -158,4 +158,3 @@ def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
         progress_bar=True,
     )
     logger.info(f"Data uploaded into: {table_ref.path}")
-
