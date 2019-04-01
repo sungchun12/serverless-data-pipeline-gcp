@@ -3,6 +3,7 @@
 
 This module has functions that create a raw data bucket
 in google cloud storage, and creates dataset-table pairs.
+
 """
 # gcp modules
 from google.cloud import storage
@@ -21,8 +22,9 @@ def create_bucket(bucket_name):
         bucket_name: name of GCS bucket to be created
 
     Returns:
-        Created a new bucket: <bucket path>
-          OR Bucket already exists: <bucket path>
+        ``Created a new bucket: <bucket path>``
+          OR ``Bucket already exists: <bucket path>``
+
     """
     client = storage.Client()
     # authenticate service account
@@ -47,6 +49,7 @@ def dataset_exists(client, dataset_reference):
 
     Returns:
         bool: ``True`` if the table exists, ``False`` otherwise.
+
     """
     from google.cloud.exceptions import NotFound
 
@@ -68,6 +71,7 @@ def table_exists(client, table_reference):
 
     Returns:
         bool: ``True`` if the table exists, ``False`` otherwise.
+
     """
     from google.cloud.exceptions import NotFound
 
@@ -90,11 +94,12 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
         partition_by: Which datetime field to partition by
 
     Returns:
-        Created new dataset: <dataset path>
-          OR Dataset already exists: <dataset path>
+        ``Created new dataset: <dataset path>``
+          OR ``Dataset already exists: <dataset path>``
         &
-        Created empty table partitioned on column: partition_by
-          OR Table already exists: <table path>
+        ``Created empty table partitioned on column: partition_by``
+          OR ``Table already exists: <table path>``
+
     """
     # setup the client
     bigquery_client = bigquery.Client()
