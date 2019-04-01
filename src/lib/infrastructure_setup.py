@@ -19,7 +19,8 @@ logger = set_logger(__name__)
 def create_bucket(bucket_name):
     """Detects whether or not a new bucket needs to be created"""
     client = storage.Client()
-    # .from_service_account_json('service_account.json') #authenticate service account
+    # authenticate service account
+    # .from_service_account_json('service_account.json')
     bucket = client.bucket(bucket_name)  # capture bucket details
     bucket.location = "US-CENTRAL1"  # define regional location
     if not bucket.exists():  # checks if bucket doesn't exist
