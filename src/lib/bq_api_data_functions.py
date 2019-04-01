@@ -1,6 +1,12 @@
 #!/usr/bin/env python
-"""
-Add a description here
+"""Module which captures number of rows in tables and runs SQL queries.
+
+This module is responsible for:
+-Capturing total number of rows in a BigQuery table
+-Querying max timestamp in a date field based on rows within current date
+-Querying unique records based on the above timestamp
+-Appending unique records to a final table
+
 """
 # gcp modules
 from google.cloud import bigquery
