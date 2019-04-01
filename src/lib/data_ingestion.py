@@ -30,7 +30,15 @@ logger = set_logger(__name__)
 
 
 def create_results_df():
-    """Create a dataframe based on JSON from the Chicago traffic API"""
+    """Create a dataframe based on JSON from the Chicago traffic API
+
+    Args:
+        None
+
+    Returns:
+        Dataframe object: ``results_df``
+
+    """
     try:
         # First 2000 results, returned as JSON from API / converted to Python list of
         # dictionaries by sodapy.
@@ -61,7 +69,15 @@ def create_results_df():
 # written to the volume is stored in memory.
 # Note that it will consume memory resources provisioned for the function.
 def upload_raw_data_gcs(results_df, bucket_name):
-    """Upload dataframe into google cloud storage bucket"""
+    """Upload dataframe into google cloud storage bucket.
+
+    Deletes file in temp directory after upload.
+
+    Args:
+        results_df: pandas dataframe
+        bucket_name: name of bucket to upload data towards
+
+    """
     # Write the DataFrame to GCS (Google Cloud Storage)
     storage_client = storage.Client()
     # .from_service_account_json('service_account.json') #authenticate service account
@@ -80,7 +96,14 @@ def upload_raw_data_gcs(results_df, bucket_name):
 
 
 def delete_temp_dir():
-    """Deletes every file in the /tmp directory to minimize memory load during function execution"""
+    """Deletes every file in the /tmp directory.
+
+    This minimizes memory load during function execution.
+
+    Args:
+        None
+
+    """
     # check what's in the temporary directory
     temp_path = "/tmp"
     logger.info(os.listdir(temp_path))
@@ -101,7 +124,16 @@ def delete_temp_dir():
 # https://stackoverflow.com/questions/44953463/pandas-google-bigquery-schema-mismatch-makes-the-upload-fail
 # http://pbpython.com/pandas_dtypes.html
 def convert_schema(results_df, schema_df):
-    """Converts data types in dataframe to match BigQuery destination table"""
+    """Converts data types in dataframe to match BigQuery destination table.
+
+    Args:
+        results_df: pandas dataframe
+        schema_df: schema to convert towards
+
+    Returns:
+        Dataframe Object: ``results_df_transformed``
+
+    """
     for (
         k,
         v,
@@ -115,7 +147,14 @@ def convert_schema(results_df, schema_df):
 
 
 def check_nulls(results_df_transformed):
-    """Checks if there are any nulls in the columns"""
+    """Creates list of column names if any nulls in the columns.
+
+    Args:
+        results_df_transformed: pandas dataframe with converted schema
+
+    Returns:
+        list object: ``null_columns``
+    """
     null_columns = []
     check_bool = (
         results_df_transformed.isnull().any()
@@ -133,7 +172,16 @@ def check_nulls(results_df_transformed):
 
 
 def check_null_outliers(null_columns, nulls_expected):
-    """Checks if there are any outlier nulls in the columns"""
+    """Creates list of any outlier null columns.
+
+    Args:
+        null_columns: current list of null columns in pandas dataframe
+        nulls_expected: list of nulls in scope
+
+    Returns:
+        list object: ``null_outliers``
+
+    """
     null_outliers = (
         []
     )  # empty list to collect list of columns that are not expected to be null
@@ -148,7 +196,15 @@ def check_null_outliers(null_columns, nulls_expected):
 # https://cloud.google.com/bigquery/docs/pandas-gbq-migration#loading_a_pandas_dataframe_to_a_table
 # https://github.com/pydata/pandas-gbq/issues/133#issuecomment-411119426
 def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
-    """Uploads data into bigquery and appends if data already exists"""
+    """Uploads data into bigquery and appends if data already exists.
+
+    Args:
+        results_df_transformed: pandas dataframe with converted schema
+        project_id: name of project where you want to upload data
+        dataset_name: name of target dataset
+        table_name: name of target table
+
+    """
     bigquery_client = bigquery.Client()
     dataset_ref = bigquery_client.dataset(dataset_name)
     table_ref = dataset_ref.table(table_name)
