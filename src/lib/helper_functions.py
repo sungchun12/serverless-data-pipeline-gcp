@@ -1,6 +1,11 @@
 #!/usr/bin/env python
-"""
-Add a description here
+"""Module with miscellaneous utility functions.
+
+This module contains a function to capture the current datetime stamp,
+and configures logging format.
+
+This module can be used to add more helper functions as needed.
+
 """
 
 # built in python modules
