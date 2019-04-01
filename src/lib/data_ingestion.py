@@ -1,6 +1,13 @@
 #!/usr/bin/env python
-"""
-Add a description here
+"""Module which contains functions to ingest and check data for outliers.
+
+This module is responsible for:
+-Creating a pandas dataframe using an api call to Chicago traffic data
+-Uploading a pandas dataframe to a google cloud storage bucket
+-Converting pandas dataframe schema
+-Checking for null outliers in scope
+-Uploading a pandas dataframe to BigQuery
+
 """
 
 # built in python modules
