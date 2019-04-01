@@ -1,6 +1,16 @@
 #!/usr/bin/env python
-"""
-add description here
+"""Cloud Function which creates an end to end data pipeline.
+
+API Data Source: https://dev.socrata.com/foundry/data.cityofchicago.org/n4j6-wkkf
+
+This Cloud Function is responsible for:
+-Tracing performance of subsets of function calls via spans
+-Defining and creating infrastructure such as dataset, tables, bucket
+-Ingesting raw data from an api call into google cloud storage
+-Converting a pandas dataframe raw data schema to match BigQuery
+-Ingesting data into BigQuery
+-Capturing recent and unique records based on current date of invocation
+-Appending unique records to final table
 
 """
 # opencensus modules to trace function performance
@@ -38,8 +48,7 @@ logger = set_logger(__name__)
 # explains why to use pubsub as middleware
 # https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule
 def handler(event, context):
-    """
-    Main function that orchestrates the data pipeline from start to finish.
+    """Main function that orchestrates the data pipeline from start to finish.
     Triggered from a message on a Cloud Pub/Sub topic.
 
     Args:
