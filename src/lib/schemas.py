@@ -1,7 +1,10 @@
 #!/usr/bin/env python
-"""
-This contains the bigquery and dataframe schemas for data warehouse setup.
+"""This contains the bigquery and dataframe schemas for data warehouse setup.
+
 Change these values for your table schemas in scope.
+Data types defined in BigQuery are mapped to pandas dataframe data types.
+If data types do not match, data will not be able to be uploaded to bigquery.
+
 """
 # gcp modules
 from google.cloud import bigquery
