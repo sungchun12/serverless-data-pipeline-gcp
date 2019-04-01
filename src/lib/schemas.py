@@ -31,9 +31,11 @@ schema_bq = [
         "TIMESTAMP",
         mode="NULLABLE",
         description=" If the \
-          LAST_UPDATED time is several days old, it can be assumed that no transit service over the segment \
-          currently. These segments are included in the Chicago Traffic Tracker dataset because they are key \
-          routes and CDOT intends to monitor traffic conditions through other means in the near future.\
+          LAST_UPDATED time is several days old, it can be assumed that no \
+          transit service over the segment currently. \
+          These segments are included in the Chicago Traffic Tracker dataset \
+          because they are key routes and CDOT intends to monitor \
+          traffic conditions through other means in the near future. \
           Will display UTC, but truly represents CST.",
     ),  # in CST -06:00
     bigquery.SchemaField(
@@ -46,19 +48,22 @@ schema_bq = [
         "_lif_lat",
         "FLOAT",
         mode="NULLABLE",
-        description="The starting point latitude. See start_lon for a fuller description.",
+        description="The starting point latitude. \
+          See start_lon for a fuller description.",
     ),
     bigquery.SchemaField(
         "_lit_lat",
         "FLOAT",
         mode="NULLABLE",
-        description="The ending point latitude. See start_lon for a fuller description.",
+        description="The ending point latitude. \
+          See start_lon for a fuller description.",
     ),
     bigquery.SchemaField(
         "_lit_lon",
         "FLOAT",
         mode="NULLABLE",
-        description="The ending point longitude. See start_lon for a fuller description.",
+        description="The ending point longitude. \
+          See start_lon for a fuller description.",
     ),
     bigquery.SchemaField(
         "_strheading",
@@ -77,9 +82,11 @@ schema_bq = [
         "_traffic",
         "INTEGER",
         mode="NULLABLE",
-        description="Real-time estimated speed in miles per hour. For congestion advisory and traffic \
-          maps, this value is compared to a 0-9, 10-20, and 21 & over scale to display heavy, medium, and free \
-          flow conditions for the traffic segment. Except for a very few segments speed on city arterials is limited \
+        description="Real-time estimated speed in miles per hour. \
+          For congestion advisory and traffic maps, this value is compared to \
+          a 0-9, 10-20, and 21 & over scale to display heavy, medium, \
+          and free flow conditions for the traffic segment. \
+          Except for a very few segments speed on city arterials is limited \
           to 30 mph by ordinance.",
     ),
     bigquery.SchemaField(
@@ -92,8 +99,11 @@ schema_bq = [
         "start_lon",
         "FLOAT",
         mode="NULLABLE",
-        description="The longitude associated with the starting point of the segment in the direction of traffic flow. \
-    For two-way streets it is roughly at the middle of the half that the segment is representing. For one-way streets this is the street center line. ",
+        description="The longitude associated with the starting point of the \
+          segment in the direction of traffic flow. \
+          For two-way streets it is roughly at the middle of the half \
+            that the segment is representing. \
+          For one-way streets this is the street center line. ",
     ),
     bigquery.SchemaField(
         "street",
@@ -103,7 +113,7 @@ schema_bq = [
     ),
 ]
 
-# apply a schema to pandas dataframe to match BigQuery for equivalent data types
+# apply a schema to pandas dataframe to match BigQuery for equivalent types
 schema_df = {
     "_comments": "object",
     "_direction": "object",
@@ -120,4 +130,3 @@ schema_df = {
     "start_lon": "float64",
     "street": "object",
 }
-
