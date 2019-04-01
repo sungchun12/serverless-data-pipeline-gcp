@@ -12,10 +12,6 @@ from lib.helper_functions import set_logger
 logger = set_logger(__name__)
 
 
-# TODO: create a method where a service account is explicitly
-# authorized to create a cloud function vs. using my local service account file
-
-
 def create_bucket(bucket_name):
     """Detects whether or not a new bucket needs to be created"""
     client = storage.Client()
@@ -93,7 +89,8 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
     dataset.location = "US"
 
     # Send the dataset to the API for creation.
-    # Raises google.api_core.exceptions.Conflict if the Dataset already exists within the project.
+    # Raises google.api_core.exceptions.
+    # Conflict if the Dataset already exists within the project.
     if (
         dataset_exists(bigquery_client, dataset_ref) is False
     ):  # checks if dataset not found
@@ -107,23 +104,24 @@ def create_dataset_table(dataset_name, table_name, table_desc, schema, partition
         table_name
     )  # construct a full table object to send to the api
 
-    if table_exists(bigquery_client, table_ref) is False:  # checks if table not found
+    if table_exists(bigquery_client, table_ref) is False:
         table = bigquery.Table(table_ref, schema=schema)
         table.time_partitioning = bigquery.TimePartitioning(
-            type_=bigquery.TimePartitioningType.DAY,  # day is the only supported type for now
-            field=partition_by,
+            type_=bigquery.TimePartitioningType.DAY,
+            field=partition_by,  # day is the only supported type for now
         )  # name of column to use for partitioning
-        table = bigquery_client.create_table(table)  # API request
-        assert table.table_id == table_name  # checks if table_id matches table_name
+        table = bigquery_client.create_table(table)
+        assert table.table_id == table_name  # checks if table_id matches
 
         # update the table description
         table.description = table_desc
-        table = bigquery_client.update_table(table, ["description"])  # API request
+        table = bigquery_client.update_table(table, ["description"])
         assert (
             table.description == table_desc
         )  # checks if table description matches the update
         logger.info(
-            f"Created empty table partitioned on column: {table.time_partitioning.field}"
+            f"Created empty table partitioned \
+              on column: {table.time_partitioning.field}"
         )
     else:
         logger.info(f"Table already exists: {table_ref.path}")
