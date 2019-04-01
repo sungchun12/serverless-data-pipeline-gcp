@@ -6,7 +6,8 @@ Add a description here
 # built in python modules
 
 from datetime import datetime
-import logging, sys
+import logging
+import sys
 
 
 def _getToday():
