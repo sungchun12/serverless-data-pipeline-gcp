@@ -18,7 +18,16 @@ logger = set_logger(__name__)
 
 
 def bq_table_num_rows(dataset_name, table_name):
-    """Print total number of rows in destination bigquery table"""
+    """Log total number of rows in destination bigquery table.
+
+    Args:
+        dataset_name: destination dataset name
+        table_name: destination table name
+
+    Returns:
+        Integer object: ``num_rows``
+
+    """
     bigquery_client = (
         bigquery.Client()
     )  # instantiate bigquery client to interact with api
@@ -31,8 +40,16 @@ def bq_table_num_rows(dataset_name, table_name):
 
 
 def query_max_timestamp(project_id, dataset_name, table_name):
-    """Return the max timestamp
-    from a table in bigquery after current date in CST
+    """Return the max timestamp in BigQuery table after current date in CST.
+
+    Args:
+        project_id: destination project id
+        dataset_name: destination dataset name
+        table_name: destination table name
+
+    Returns:
+        string object: ``max_timestamp``
+
     """
     # in central Chicago time
     sql = f"SELECT max(_last_updt) as max_timestamp \
@@ -55,7 +72,17 @@ def query_max_timestamp(project_id, dataset_name, table_name):
 # WRITE_EMPTY: If the table already exists and contains data,
 # a 'duplicate' error is returned in the job result.
 def query_unique_records(project_id, dataset_name, table_name, table_name_2):
-    """Queries unique records from original table, saves in staging table"""
+    """Queries unique records from original table, saves in staging table.
+
+    Unique records are filtered by filtering all records >= the max timestamp.
+
+    Args:
+        project_id: destination project id
+        dataset_name: destination dataset name
+        table_name: starting table name
+        table_name_2: destination table name
+
+    """
     bigquery_client = bigquery.Client()
     job_config = bigquery.QueryJobConfig()
     table_ref = bigquery_client.dataset(dataset_name).table(
@@ -78,7 +105,15 @@ def query_unique_records(project_id, dataset_name, table_name, table_name_2):
 
 
 def append_unique_records(project_id, dataset_name, table_name, table_name_2):
-    """Queries unique staging table and appends new results onto final table"""
+    """Queries unique staging table and appends new results onto final table.
+
+    Args:
+        project_id: destination project id
+        dataset_name: destination dataset name
+        table_name: starting table name
+        table_name_2: destination table name
+
+    """
     bigquery_client = bigquery.Client()
     job_config = bigquery.QueryJobConfig()
     table_ref = bigquery_client.dataset(dataset_name).table(
@@ -86,6 +121,7 @@ def append_unique_records(project_id, dataset_name, table_name, table_name_2):
     )  # set destination table
     job_config.destination = table_ref
     job_config.write_disposition = "WRITE_APPEND"
+    # left outer join to avoid appending duplicate data
     sql = f"SELECT a.* FROM `{project_id}.{dataset_name}.{table_name}` a \
             LEFT JOIN `{project_id}.{dataset_name}.{table_name_2}` b \
             on a.segmentid = b.segmentid AND a._last_updt = b._last_updt \
