@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-"""
-Add a description here
+"""Module which creates data pipeline storage infrastructure
+
+This module has functions that create a raw data bucket
+in google cloud storage, and creates dataset-table pairs.
 """
 # gcp modules
 from google.cloud import storage
@@ -13,7 +15,15 @@ logger = set_logger(__name__)
 
 
 def create_bucket(bucket_name):
-    """Detects whether or not a new bucket needs to be created"""
+    """Creates a bucket if not detected
+
+    Args:
+        bucket_name: name of GCS bucket to be created
+
+    Returns:
+        Created a new bucket: <bucket path>
+          OR Bucket already exists: <bucket path>
+    """
     client = storage.Client()
     # authenticate service account
     # .from_service_account_json('service_account.json')
@@ -70,9 +80,21 @@ def table_exists(client, table_reference):
 
 # https://cloud.google.com/bigquery/docs/python-client-migration#update_a_table
 def create_dataset_table(dataset_name, table_name, table_desc, schema, partition_by):
-    """
-    Detects whether or not a new dataset and/or table need to be created.
-    Creates the dataset and table if either do not exist.
+    """Creates a new dataset and/or table if not detected.
+
+    Args:
+        dataset_name: Name of dataset to be created
+        table_name: Name of table to be created within dataset
+        table_desc: table descriptions
+        schema: table schema with data types
+        partition_by: Which datetime field to partition by
+
+    Returns:
+        Created new dataset: <dataset path>
+          OR Dataset already exists: <dataset path>
+        &
+        Created empty table partitioned on column: partition_by
+          OR Table already exists: <table path>
     """
     # setup the client
     bigquery_client = bigquery.Client()
