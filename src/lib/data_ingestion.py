@@ -44,11 +44,14 @@ def create_results_df():
         raise e
 
 
-# GZIP compression uses more CPU resources than Snappy or LZO, but provides a higher compression ratio.
+# GZIP compression uses more CPU resources than Snappy or LZO,
+# but provides a higher compression ratio.
 # GZip is often a good choice for cold data, which is accessed infrequently.
 # Snappy or LZO are a better choice for hot data, which is accessed frequently.
-# The only writeable part of the filesystem is the /tmp directory, which you can use to store temporary files in a function instance.
-# This is a local disk mount point known as a "tmpfs" volume in which data written to the volume is stored in memory.
+# The only writeable part of the filesystem is the /tmp directory, which you
+# can use to store temporary files in a function instance.
+# This is a local disk mount point known as a "tmpfs" volume in which data
+# written to the volume is stored in memory.
 # Note that it will consume memory resources provisioned for the function.
 def upload_raw_data_gcs(results_df, bucket_name):
     """Upload dataframe into google cloud storage bucket"""
@@ -146,9 +149,10 @@ def upload_to_gbq(results_df_transformed, project_id, dataset_name, table_name):
     # job_config.write_disposition = 'WRITE_TRUNCATE' #if table exists, append to it
     # job_config.ignoreUnknownValues = 'T' #ignore columns that don't match destination schema
     # job_config.schema_update_options ='ALLOW_FIELD_ADDITION'
-    # #TODO: bad request due to schema mismatch with an index field
+    # TODO: bad request due to schema mismatch with an index field
     # https://github.com/googleapis/google-cloud-python/issues/5572
-    # bigquery_client.load_table_from_dataframe(results_df_transformed, table_ref, num_retries = 5, job_config = job_config).result()
+    # bigquery_client.load_table_from_dataframe(results_df_transformed,
+    # table_ref, num_retries = 5, job_config = job_config).result()
     gbq.to_gbq(
         results_df_transformed,
         dataset_name + "." + table_name,
