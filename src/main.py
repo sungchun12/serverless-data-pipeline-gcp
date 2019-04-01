@@ -48,12 +48,14 @@ logger = set_logger(__name__)
 # explains why to use pubsub as middleware
 # https://cloud.google.com/scheduler/docs/start-and-stop-compute-engine-instances-on-a-schedule
 def handler(event, context):
-    """Main function that orchestrates the data pipeline from start to finish.
+    """Entry point function that orchestrates the data pipeline from start to finish.
+
     Triggered from a message on a Cloud Pub/Sub topic.
 
     Args:
         event (dict): Event payload.
         context (google.cloud.functions.Context): Metadata for the event.
+
     """
     # instantiate trace exporter
     project_id = (
