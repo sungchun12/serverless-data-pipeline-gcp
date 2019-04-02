@@ -1,7 +1,0 @@
-{
-  "python.linting.pylintEnabled": true,
-  "python.linting.enabled": true,
-  "python.linting.pep8Enabled": true,
-  "python.formatting.provider": "black",
-  "editor.formatOnSave": true
-}
