@@ -9,3 +9,5 @@ traffic_*
 src/lib/__pycache__/*.pyc
 #ignore temp folder
 tmp
+#ignore archive
+archive
