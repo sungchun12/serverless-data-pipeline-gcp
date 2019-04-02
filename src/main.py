@@ -9,7 +9,7 @@ This Cloud Function is responsible for:
 -Ingesting raw data from an api call into google cloud storage
 -Converting a pandas dataframe raw data schema to match BigQuery
 -Ingesting data into BigQuery
--Capturing recent and unique records based on current date of invocation
+-Run SQL queries capturing recent and unique records based on current date of invocation
 -Appending unique records to final table
 
 """
