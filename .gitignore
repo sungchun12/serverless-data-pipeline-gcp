@@ -16,8 +16,6 @@
 # #ignore pynb checkpoints
 # .ipynb_checkpoints/
 
-#exclude files and directories in top directory
-/*
 
 #include the src directory
 !/src
@@ -30,3 +28,6 @@
 
 #include README
 !README.md
+
+#exclude files and directories in top directory
+/*
