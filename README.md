@@ -62,7 +62,7 @@ Ex: `gcloud pubsub topics publish demo_topic --message "Can you see this?"`
 
 `gcloud functions logs read --limit 50`
 
-7. Deploy cloud scheduler job
+7. Deploy cloud scheduler job which publishes a message to Pub/Sub every 5 minutes
 
 ```
 gcloud beta scheduler jobs create pubsub <job-name> \
@@ -71,7 +71,9 @@ gcloud beta scheduler jobs create pubsub <job-name> \
 	--message-body '{"<Message-to-publish-to-pubsub>"}' \
 	--time-zone 'America/Chicago'
 ```
+
 Ex:
+
 ```
 gcloud beta scheduler jobs create pubsub schedule-function \
 	--schedule "*/5 * * * *" \
@@ -80,20 +82,10 @@ gcloud beta scheduler jobs create pubsub schedule-function \
 	--time-zone 'America/Chicago'
 ```
 
-# this is needed for local development in order to appropriately access GCP from a local service account key
+8. Test end to end pipeline by manually running cloud scheduler job. Next, repeat step 6 above.
 
-# #https://cloud.google.com/docs/authentication/production#auth-cloud-compute-engine-python
+`gcloud beta scheduler jobs run <job-name>`
 
-# #may not use this at all and have cloud functions use the default service account: https://cloud.google.com/docs/authentication/production#auth-cloud-compute-engine-python
+Ex: `gcloud beta scheduler jobs run schedule-function`
 
-# # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="./service_account.json", used for jupyter notebook
-
-# # https://cloud.google.com/docs/authentication/getting-started#auth-cloud-implicit-python
-
-# #run the below in windomws command prompt for authentication
-
-# # set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\sungwon.chung\Desktop\cloud_function_poc\service_account.json
-
-# #for linux: export GOOGLE_APPLICATION_CREDENTIALS="mnt/c/Users/sungwon.chung/Desktop/cloud_function_poc/service_account.json"
-
-# """
+**YOUR PIPELINE IS DEPLOYED!**
