@@ -16,7 +16,9 @@
 # #ignore pynb checkpoints
 # .ipynb_checkpoints/
 
-*
+#whitelist src directory
+/*
+!/src
+/src/*
 !.gitignore
-!cloud_function_poc/src/
 !README.md
