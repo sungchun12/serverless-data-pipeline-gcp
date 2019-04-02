@@ -1,13 +1,22 @@
 ### Ignore sensitive and workspace files ###
-#confidential credentials
-service_account.json
-#workspace dev config
-cloud_function_poc.code-workspace
-#raw files
-traffic_* 
-#ignore pycache files
-src/lib/__pycache__/*.pyc
-#ignore temp folder
-tmp
-#ignore archive
-archive
+# #confidential credentials
+# service_account.json
+# #workspace dev config
+# cloud_function_poc.code-workspace
+# #raw files
+# traffic_* 
+# #ignore pycache files
+# src/lib/__pycache__/*.pyc
+# #ignore temp folder
+# tmp
+# #ignore archive
+# cloud_function_poc/archive/
+# #ignore drafted gcloud scripts
+# cloud_function_poc/gcloud_scripts/
+# #ignore pynb checkpoints
+# .ipynb_checkpoints/
+
+*
+!.gitignore
+!cloud_function_poc/src/
+!README.md
