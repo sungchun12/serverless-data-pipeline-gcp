@@ -10,6 +10,19 @@
 - Understand how to measure function performance throughout execution
 - Show me how to do it better :)
 
+**Data Pipeline Operations:**
+
+1. Creates raw data bucket
+2. Creates BigQuery dataset and raw, staging, and final tables with defined schemas
+3. Downloads data from Chicago traffic API
+4. Ingests data as pandas dataframe
+5. Uploads pandas dataframe to raw data bucket
+6. Converts dataframe schema to match BigQuery defined schema
+7. Uploads pandas dataframe to raw BigQuery table
+8. Run SQL queries to capture and accumulate unique records based on current date
+9. Sends performance metrics to Stackdriver Trace
+
+
 **Technologies:** Cloud Shell, Cloud Functions, Pub/Sub, Cloud Storage, Cloud Scheduler, BigQuery, Stackdriver Trace
 
 **Languages:** Python 3.7, SQL(Standard)
@@ -37,7 +50,7 @@
 - A heart and mind eager to create data pipelines
 - Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API
 
-1. Activate Cloud Shell
+1. Activate Cloud Shell: https://cloud.google.com/shell/docs/quickstart#start_cloud_shell
 2. Clone repository
 
 ```
@@ -74,7 +87,7 @@ Ex:
 gcloud pubsub topics publish demo_topic --message "Can you see this?"
 ```
 
-6. Check logs to see how function performed. You may have to reexecute this command line multiple times if logs don't show up initially
+6. Check logs to see how function performed. You may have to re-execute this command line multiple times if logs don't show up initially
 
 ```
 gcloud functions logs read --limit 50
@@ -93,7 +106,7 @@ gcloud beta scheduler jobs create pubsub <job-name> \
 Ex:
 
 ```
-gcloud beta scheduler jobs create pubsub schedule-function \
+gcloud beta scheduler jobs create pubsub schedule_function \
 	--schedule "*/5 * * * *" \
 	--topic test_topic \
 	--message-body '{"Can you see this? With love, cloud scheduler"}' \
@@ -109,7 +122,11 @@ gcloud beta scheduler jobs run <job-name>
 Ex:
 
 ```
-gcloud beta scheduler jobs run schedule-function
+gcloud beta scheduler jobs run schedule_function
 ```
 
-**YOUR PIPELINE IS DEPLOYED!**
+9. Understand pipeline performance by opening stacktrace and click "get_kpis": https://cloud.google.com/trace/docs/quickstart#view_the_trace_overview
+
+**YOUR PIPELINE IS DEPLOYED AND MEASURABLE!**
+
+**Note:** You'll notice extraneous blocks of comments and commented out code throughout the python scripts.
