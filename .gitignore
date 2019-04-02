@@ -16,9 +16,17 @@
 # #ignore pynb checkpoints
 # .ipynb_checkpoints/
 
-#whitelist src directory
+#exclude files and directories in top directory
 /*
+
+#include the src directory
 !/src
-/src/*
+
+#include the src/lib directory 
+!/src/lib
+
+#include gitignore
 !.gitignore
+
+#include README
 !README.md
