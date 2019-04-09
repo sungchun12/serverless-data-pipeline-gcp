@@ -16,11 +16,11 @@
 2. Creates BigQuery dataset and raw, staging, and final tables with defined schemas
 3. Downloads data from Chicago traffic API
 4. Ingests data as pandas dataframe
-5. Uploads pandas dataframe to raw data bucket
+5. Uploads pandas dataframe to raw data bucket as a parquet file
 6. Converts dataframe schema to match BigQuery defined schema
 7. Uploads pandas dataframe to raw BigQuery table
 8. Run SQL queries to capture and accumulate unique records based on current date
-9. Sends performance metrics to Stackdriver Trace
+9. Sends function performance metrics to Stackdriver Trace
 
 
 **Technologies:** Cloud Shell, Cloud Functions, Pub/Sub, Cloud Storage, Cloud Scheduler, BigQuery, Stackdriver Trace
