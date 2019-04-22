@@ -22,7 +22,6 @@
 8. Run SQL queries to capture and accumulate unique records based on current date
 9. Sends function performance metrics to Stackdriver Trace
 
-
 **Technologies:** Cloud Shell, Cloud Functions, Pub/Sub, Cloud Storage, Cloud Scheduler, BigQuery, Stackdriver Trace
 
 **Languages:** Python 3.7, SQL(Standard)
@@ -48,7 +47,19 @@
 - An open Google Cloud account: https://cloud.google.com/free/
 - Proficient in Python and SQL
 - A heart and mind eager to create data pipelines
-- Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API
+- Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API(gcloud CLI equivalent below)
+
+```
+gcloud config set project <your-project-id>
+
+gcloud services enable \
+cloudfunctions.googleapis.com \
+cloudtrace.googleapis.com \
+pubsub.googleapis.com \
+cloudscheduler.googleapis.com \
+storage-component.googleapis.com \
+bigquery-json.googleapis.com
+```
 
 1. Activate Cloud Shell: https://cloud.google.com/shell/docs/quickstart#start_cloud_shell
 2. Clone repository
