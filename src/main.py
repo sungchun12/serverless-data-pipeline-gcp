@@ -13,6 +13,9 @@ This Cloud Function is responsible for:
 -Appending unique records to final table
 
 """
+# decoding module for pubsub
+import base64
+
 # opencensus modules to trace function performance
 # https://opencensus.io/exporters/supported-exporters/python/stackdriver/
 import opencensus
@@ -22,25 +25,22 @@ from opencensus.trace.exporters.transports.background_thread import (
     BackgroundThreadTransport,
 )
 
-# decoding module for pubsub
-import base64
-
 # lib modules
 from lib.bq_api_data_functions import (
+    append_unique_records,
     bq_table_num_rows,
     query_unique_records,
-    append_unique_records,
 )
 from lib.data_ingestion import (
+    check_null_outliers,
+    check_nulls,
+    convert_schema,
     create_results_df,
     upload_raw_data_gcs,
-    convert_schema,
-    check_nulls,
-    check_null_outliers,
     upload_to_gbq,
 )
-from lib.infrastructure_setup import create_bucket, create_dataset_table
 from lib.helper_functions import set_logger
+from lib.infrastructure_setup import create_bucket, create_dataset_table
 
 logger = set_logger(__name__)
 
