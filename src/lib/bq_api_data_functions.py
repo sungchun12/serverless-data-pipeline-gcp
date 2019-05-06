@@ -91,7 +91,7 @@ def query_unique_records(project_id, dataset_name, table_name, table_name_2):
     job_config.destination = table_ref
     job_config.write_disposition = "WRITE_TRUNCATE"
     max_timestamp = query_max_timestamp(project_id, dataset_name, table_name)
-    sql = f"SELECT * FROM `{project_id}.{dataset_name}.{table_name}` \
+    sql = f"SELECT DISTINCT * FROM `{project_id}.{dataset_name}.{table_name}` \
             WHERE _last_updt >= TIMESTAMP(DATETIME '{max_timestamp}');"
     query_job = bigquery_client.query(
         sql,
