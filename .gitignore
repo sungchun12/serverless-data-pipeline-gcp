@@ -12,3 +12,6 @@
 
 #include README
 !README.md
+
+#include cloudbuild config
+!cloudbuild.yaml
