@@ -1,0 +1,71 @@
+steps:
+  # Configure IAM Access
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker pull gcr.io/$PROJECT_ID/dash-cloudrun-demo:latest || exit 0
+
+  # clone the git repository
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
+        "-t",
+        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:latest",
+        "--cache-from",
+        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:latest",
+        ".",
+      ]
+
+    # Change working directory to source code
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/dash-cloudrun-demo"]
+
+    # Deploy cloud function with pub/sub trigger
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "beta",
+        "run",
+        "deploy",
+        "dash-cloudrun-demo",
+        "--image",
+        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
+        "--region",
+        "us-central1",
+        "--allow-unauthenticated",
+      ]
+
+    # Deploy cloud scheduler job which publishes a message to Pub/Sub every 5 minutes
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "beta",
+        "run",
+        "deploy",
+        "dash-cloudrun-demo",
+        "--image",
+        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
+        "--region",
+        "us-central1",
+        "--allow-unauthenticated",
+      ]
+
+    # Check logs to see how function performed.
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "beta",
+        "run",
+        "deploy",
+        "dash-cloudrun-demo",
+        "--image",
+        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
+        "--region",
+        "us-central1",
+        "--allow-unauthenticated",
+      ]
