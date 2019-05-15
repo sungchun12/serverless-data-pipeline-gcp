@@ -1,71 +1,55 @@
 steps:
-  # Configure IAM Access
-  - name: "gcr.io/cloud-builders/docker"
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - |
-        docker pull gcr.io/$PROJECT_ID/dash-cloudrun-demo:latest || exit 0
-
   # clone the git repository
-  - name: "gcr.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/git"
     args:
-      [
-        "build",
-        "-t",
-        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
-        "-t",
-        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:latest",
-        "--cache-from",
-        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:latest",
-        ".",
-      ]
+      ["clone", "https://github.com/sungchun12/serverless_data_pipeline_gcp"]
 
-    # Change working directory to source code
-  - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/dash-cloudrun-demo"]
-
-    # Deploy cloud function with pub/sub trigger
+    # Deploy cloud function with pub/sub trigger from clone directory
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
-        "beta",
-        "run",
+        "functions",
         "deploy",
-        "dash-cloudrun-demo",
-        "--image",
-        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
-        "--region",
-        "us-central1",
-        "--allow-unauthenticated",
+        "demo_function",
+        "--entry-point",
+        "handler",
+        "--runtime",
+        "python37",
+        "--trigger-topic",
+        "demo_topic",
       ]
+    dir: "serverless_data_pipeline_gcp/src"
 
     # Deploy cloud scheduler job which publishes a message to Pub/Sub every 5 minutes
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
         "beta",
-        "run",
-        "deploy",
-        "dash-cloudrun-demo",
-        "--image",
-        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
-        "--region",
-        "us-central1",
-        "--allow-unauthenticated",
+        "scheduler",
+        "jobs",
+        "create",
+        "pubsub",
+        "schedule_function",
+        "--schedule",
+        "*/5 * * * *",
+        "--topic",
+        "demo_topic",
+        "--message-body",
+        "{'Can you see this? From cloud scheduler'}",
+        "--time-zone",
+        "America/Chicago",
       ]
 
-    # Check logs to see how function performed.
+    # Manually run the cloud scheduler job
+    # gcloud beta scheduler jobs run schedule_function
   - name: "gcr.io/cloud-builders/gcloud"
-    args:
-      [
-        "beta",
-        "run",
-        "deploy",
-        "dash-cloudrun-demo",
-        "--image",
-        "gcr.io/$PROJECT_ID/dash-cloudrun-demo:${SHORT_SHA}",
-        "--region",
-        "us-central1",
-        "--allow-unauthenticated",
-      ]
+    args: ["beta", "scheduler", "jobs", "run", "schedule_function"]
+
+    # Check logs to see how function performed.
+    # gcloud functions logs read --limit 50
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["functions", "logs", "read", "--limit", "50"]
+
+# set logs bucket location for builds
+# set this to whatever bucket you want or remove entirely and cloudbuild will create a default bucket
+logsBucket: "gs://cloud_function_build_demo"
