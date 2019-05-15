@@ -21,24 +21,17 @@ steps:
     dir: "serverless_data_pipeline_gcp/src"
 
     # Deploy cloud scheduler job which publishes a message to Pub/Sub every 5 minutes
+    # exits if it already exists
   - name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
     args:
-      [
-        "beta",
-        "scheduler",
-        "jobs",
-        "create",
-        "pubsub",
-        "schedule_function",
-        "--schedule",
-        "*/5 * * * *",
-        "--topic",
-        "demo_topic",
-        "--message-body",
-        "{'Can you see this? From cloud scheduler'}",
-        "--time-zone",
-        "America/Chicago",
-      ]
+      - "-c"
+      - |
+        gcloud beta scheduler jobs create pubsub schedule_function \
+            --schedule "*/5 * * * *" \
+            --topic demo_topic \
+            --message-body '{"Can you see this? With love, cloud scheduler"}' \
+            --time-zone 'America/Chicago' || exit 0
 
     # Manually run the cloud scheduler job
   - name: "gcr.io/cloud-builders/gcloud"
