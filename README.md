@@ -64,75 +64,75 @@ bigquery-json.googleapis.com
 1. Activate Cloud Shell: https://cloud.google.com/shell/docs/quickstart#start_cloud_shell
 2. Clone repository
 
-```
+```bash
 git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
 ```
 
 3. Change directory to relevant code
 
-```
+```bash
 cd serverless_data_pipeline_gcp/src
 ```
 
 4. Deploy cloud function with pub/sub trigger. Note: this will automatically create the trigger if it does not exist
 
-```
+```bash
 gcloud functions deploy <function-name> --entry-point handler --runtime python37 --trigger-topic <topic-name>
 ```
 
 Ex:
 
-```
+```bash
 gcloud functions deploy demo_function --entry-point handler --runtime python37 --trigger-topic demo_topic
 ```
 
 5. Test cloud function by publishing a message to pub/sub topic
 
-```
+```bash
 gcloud pubsub topics publish <topic-name> --message "<your-message>"
 ```
 
 Ex:
 
-```
+```bash
 gcloud pubsub topics publish demo_topic --message "Can you see this?"
 ```
 
 6. Check logs to see how function performed. You may have to re-execute this command line multiple times if logs don't show up initially
 
-```
+```bash
 gcloud functions logs read --limit 50
 ```
 
 7. Deploy cloud scheduler job which publishes a message to Pub/Sub every 5 minutes
 
-```
+```bash
 gcloud beta scheduler jobs create pubsub <job-name> \
-	--schedule "*/5 * * * *" \
-	--topic <topic-name> \
-	--message-body '{"<Message-to-publish-to-pubsub>"}' \
-	--time-zone 'America/Chicago'
+    --schedule "*/5 * * * *" \
+    --topic <topic-name> \
+    --message-body '{"<Message-to-publish-to-pubsub>"}' \
+    --time-zone 'America/Chicago'
 ```
 
 Ex:
 
-```
+```bash
 gcloud beta scheduler jobs create pubsub schedule_function \
-	--schedule "*/5 * * * *" \
-	--topic demo_topic \
-	--message-body '{"Can you see this? With love, cloud scheduler"}' \
-	--time-zone 'America/Chicago'
+    --schedule "*/5 * * * *" \
+    --topic demo_topic \
+    --message-body '{"Can you see this? With love, cloud scheduler"}' \
+    --time-zone 'America/Chicago'
 ```
 
 8. Test end to end pipeline by manually running cloud scheduler job. Next, repeat step 6 above.
 
-```
+```bash
 gcloud beta scheduler jobs run <job-name>
 ```
 
 Ex:
 
-```
+```bash
 gcloud beta scheduler jobs run schedule_function
 ```
 
