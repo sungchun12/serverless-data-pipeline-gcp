@@ -41,12 +41,10 @@ steps:
       ]
 
     # Manually run the cloud scheduler job
-    # gcloud beta scheduler jobs run schedule_function
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["beta", "scheduler", "jobs", "run", "schedule_function"]
 
     # Check logs to see how function performed.
-    # gcloud functions logs read --limit 50
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["functions", "logs", "read", "--limit", "50"]
 
