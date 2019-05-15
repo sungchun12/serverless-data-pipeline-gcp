@@ -49,16 +49,20 @@
 - A heart and mind eager to create data pipelines
 - Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API(gcloud CLI equivalent below)
 
+```bash
+#set project id
+gcloud config set project [your-project-id]
 ```
 gcloud config set project <your-project-id>
 
 gcloud services enable \
-cloudfunctions.googleapis.com \
-cloudtrace.googleapis.com \
-pubsub.googleapis.com \
-cloudscheduler.googleapis.com \
-storage-component.googleapis.com \
-bigquery-json.googleapis.com
+    cloudfunctions.googleapis.com \
+    cloudtrace.googleapis.com \
+    pubsub.googleapis.com \
+    cloudscheduler.googleapis.com \
+    storage-component.googleapis.com \
+    bigquery-json.googleapis.com \
+    cloudbuild.googleapis.com
 ```
 
 1. Activate Cloud Shell: https://cloud.google.com/shell/docs/quickstart#start_cloud_shell
@@ -68,7 +72,23 @@ bigquery-json.googleapis.com
 git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
 ```
 
-3. Change directory to relevant code
+Note: If you want to automate the build and deployment of this pipeline, submit the commands in order in cloud shell after completing the above prerequisites. It skips step 5 below as it is redundant for auto-deployment.
+
+Find your Cloudbuild service account in the IAM console. Ex: [unique-id]@cloudbuild.gserviceaccount.com
+
+```bash
+#add role permissions to CloudBuild Service Account
+gcloud projects add-iam-policy-binding [your-project-id] \
+    --member serviceAccount:[unique-id]@cloudbuild.gserviceaccount.com \
+    --role roles/cloudfunctions.developer \
+    --role roles/cloudscheduler.admin \
+    --role roles/logging.viewer
+```
+
+```bash
+#Deploy steps in cloudbuild configuration file
+gcloud builds submit --config cloudbuild.yaml .
+```
 
 ```bash
 cd serverless_data_pipeline_gcp/src
