@@ -83,7 +83,7 @@ gcloud functions deploy <function-name> --entry-point handler --runtime python37
 Ex:
 
 ```
-cloud functions deploy demo_function --entry-point handler --runtime python37 --trigger-topic demo_topic
+gcloud functions deploy demo_function --entry-point handler --runtime python37 --trigger-topic demo_topic
 ```
 
 5. Test cloud function by publishing a message to pub/sub topic
@@ -119,7 +119,7 @@ Ex:
 ```
 gcloud beta scheduler jobs create pubsub schedule_function \
 	--schedule "*/5 * * * *" \
-	--topic test_topic \
+	--topic demo_topic \
 	--message-body '{"Can you see this? With love, cloud scheduler"}' \
 	--time-zone 'America/Chicago'
 ```
