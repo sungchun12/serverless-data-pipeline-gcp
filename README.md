@@ -47,14 +47,15 @@
 - An open Google Cloud account: https://cloud.google.com/free/
 - Proficient in Python and SQL
 - A heart and mind eager to create data pipelines
-- Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API(gcloud CLI equivalent below)
+- Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API, Cloud Build API(gcloud CLI equivalent below when submitted through cloud shell)
 
 ```bash
 #set project id
 gcloud config set project [your-project-id]
 ```
-gcloud config set project <your-project-id>
 
+```bash
+#Enable Google service APIs
 gcloud services enable \
     cloudfunctions.googleapis.com \
     cloudtrace.googleapis.com \
@@ -65,8 +66,8 @@ gcloud services enable \
     cloudbuild.googleapis.com
 ```
 
-1. Activate Cloud Shell: https://cloud.google.com/shell/docs/quickstart#start_cloud_shell
-2. Clone repository
+1.  Activate Cloud Shell: https://cloud.google.com/shell/docs/quickstart#start_cloud_shell
+2.  Clone repository
 
 ```bash
 git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
@@ -90,14 +91,16 @@ gcloud projects add-iam-policy-binding [your-project-id] \
 gcloud builds submit --config cloudbuild.yaml .
 ```
 
+3.  Change directory to relevant code
+
 ```bash
 cd serverless_data_pipeline_gcp/src
 ```
 
-4. Deploy cloud function with pub/sub trigger. Note: this will automatically create the trigger if it does not exist
+4.  Deploy cloud function with pub/sub trigger. Note: this will automatically create the trigger if it does not exist
 
 ```bash
-gcloud functions deploy <function-name> --entry-point handler --runtime python37 --trigger-topic <topic-name>
+gcloud functions deploy [function-name] --entry-point handler --runtime python37 --trigger-topic [topic-name]
 ```
 
 Ex:
@@ -106,10 +109,10 @@ Ex:
 gcloud functions deploy demo_function --entry-point handler --runtime python37 --trigger-topic demo_topic
 ```
 
-5. Test cloud function by publishing a message to pub/sub topic
+5.  Test cloud function by publishing a message to pub/sub topic
 
 ```bash
-gcloud pubsub topics publish <topic-name> --message "<your-message>"
+gcloud pubsub topics publish [topic-name] --message "<your-message>"
 ```
 
 Ex:
@@ -118,18 +121,18 @@ Ex:
 gcloud pubsub topics publish demo_topic --message "Can you see this?"
 ```
 
-6. Check logs to see how function performed. You may have to re-execute this command line multiple times if logs don't show up initially
+6.  Check logs to see how function performed. You may have to re-execute this command line multiple times if logs don't show up initially
 
 ```bash
 gcloud functions logs read --limit 50
 ```
 
-7. Deploy cloud scheduler job which publishes a message to Pub/Sub every 5 minutes
+7.  Deploy cloud scheduler job which publishes a message to Pub/Sub every 5 minutes
 
 ```bash
-gcloud beta scheduler jobs create pubsub <job-name> \
+gcloud beta scheduler jobs create pubsub [job-name] \
     --schedule "*/5 * * * *" \
-    --topic <topic-name> \
+    --topic [topic-name] \
     --message-body '{"<Message-to-publish-to-pubsub>"}' \
     --time-zone 'America/Chicago'
 ```
@@ -144,10 +147,10 @@ gcloud beta scheduler jobs create pubsub schedule_function \
     --time-zone 'America/Chicago'
 ```
 
-8. Test end to end pipeline by manually running cloud scheduler job. Next, repeat step 6 above.
+8.  Test end to end pipeline by manually running cloud scheduler job. Next, repeat step 6 above.
 
 ```bash
-gcloud beta scheduler jobs run <job-name>
+gcloud beta scheduler jobs run [job-name]
 ```
 
 Ex:
@@ -156,7 +159,7 @@ Ex:
 gcloud beta scheduler jobs run schedule_function
 ```
 
-9. Understand pipeline performance by opening stacktrace and click "get_kpis": https://cloud.google.com/trace/docs/quickstart#view_the_trace_overview
+9.  Understand pipeline performance by opening stacktrace and click "get_kpis": https://cloud.google.com/trace/docs/quickstart#view_the_trace_overview
 
 **YOUR PIPELINE IS DEPLOYED AND MEASURABLE!**
 
