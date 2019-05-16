@@ -32,7 +32,7 @@
 - This follows the procedural paradigm which groups like-functions in separate files and imports them as modules into the main entrypoint file. Each operation goes through ordered actions on objects vs. OOP in which objects perform the actions
 - Pub/Sub is used as middleware as opposed to invoking an HTTP-triggered cloud function to minimize overhead code securing the URL in addition to Pub/Sub serving as a shock absorber to a sudden burst in invocations
 - This is not intended for robust production deployment as it doesn't account for edge cases and dynamic error handling
-- Lessons Learned: Leverage classes for interdependent functions and creating extensibility in table objects. I also forced stacktracing functionality to measure function performance on a pub/sub trigger, so you can't create a report to analyze performance trends.
+- Lessons Learned: Leverage classes for interdependent functions and creating extensibility in table objects. I also forced stacktracing functionality to measure function performance on a pub/sub trigger, so you can't create a report based on http requests to analyze performance trends. Stackdriver Trace will start auto-creating performance reports once there's enough data.
 
 **Further Reading:** For those looking for production-level deployments
 
