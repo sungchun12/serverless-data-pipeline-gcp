@@ -40,7 +40,7 @@
 - BQPipeline Utility Functions: <https://github.com/GoogleCloudPlatform/professional-services/tree/master/tools/bqpipeline>
 - I discovered the above after I created this pipeline...HA!
 
-# Deployment Instructions
+## Deployment Instructions
 
 **Prerequisites:**
 
@@ -167,7 +167,7 @@ Ex:
 gcloud beta scheduler jobs run schedule_function
 ```
 
-9.  Understand pipeline performance by opening stacktrace and click "get_kpis": https://cloud.google.com/trace/docs/quickstart#view_the_trace_overview
+9.  Understand pipeline performance by opening stacktrace and click "get_kpis": <https://cloud.google.com/trace/docs/quickstart#view_the_trace_overview>
 
 **YOUR PIPELINE IS DEPLOYED AND MEASURABLE!**
 
