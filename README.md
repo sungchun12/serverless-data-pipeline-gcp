@@ -32,7 +32,7 @@
 - This follows the procedural paradigm which groups like-functions in separate files and imports them as modules into the main entrypoint file. Each operation goes through ordered actions on objects vs. OOP in which objects perform the actions
 - Pub/Sub is used as middleware as opposed to invoking an HTTP-triggered cloud function to minimize overhead code securing the URL in addition to Pub/Sub serving as a shock absorber to a sudden burst in invocations
 - This is not intended for robust production deployment as it doesn't account for edge cases and dynamic error handling
-- Lessons Learned: Leverage classes for interdependent functions and creating extensibility in table objects. I also forced stacktracing functionality to measure function performance on a pub/sub trigger, so you can't create a report to analyze performance trends.
+- Lessons Learned: Leverage classes for interdependent functions and creating extensibility in table objects. I also forced stacktracing functionality to measure function performance on a pub/sub trigger, so you can't create a report based on http requests to analyze performance trends. Stackdriver Trace will start auto-creating performance reports once there's enough data.
 
 **Further Reading:** For those looking for production-level deployments
 
@@ -66,6 +66,7 @@ gcloud services enable \
     cloudbuild.googleapis.com
 ```
 
+
 [![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/sungchun12/serverless_data_pipeline_gcp.git)
 
 OR
@@ -73,13 +74,16 @@ OR
 1.  Activate Cloud Shell: <https://cloud.google.com/shell/docs/quickstart#start_cloud_shell>
 2.  Clone repository
 
+
 ```bash
 git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
 ```
 
+
 ---
 
 **Note**: If you want to automate the build and deployment of this pipeline, submit the commands in order in cloud shell after completing the above prerequisites. It skips step 5 below as it is redundant for auto-deployment.
+
 
 Find your Cloudbuild service account in the IAM console. Ex: [unique-id]@cloudbuild.gserviceaccount.com
 
@@ -97,7 +101,9 @@ gcloud projects add-iam-policy-binding [your-project-id] \
 gcloud builds submit --config cloudbuild.yaml .
 ```
 
+
 ---
+
 
 3.  Change directory to relevant code
 
@@ -167,7 +173,9 @@ Ex:
 gcloud beta scheduler jobs run schedule_function
 ```
 
+
 9.  Understand pipeline performance by opening stacktrace and click "get_kpis": <https://cloud.google.com/trace/docs/quickstart#view_the_trace_overview>
+
 
 **YOUR PIPELINE IS DEPLOYED AND MEASURABLE!**
 
