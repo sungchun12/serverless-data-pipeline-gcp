@@ -76,8 +76,8 @@ OR
 ```bash
 git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
 ```
-
-Note: If you want to automate the build and deployment of this pipeline, submit the commands in order in cloud shell after completing the above prerequisites. It skips step 5 below as it is redundant for auto-deployment.
+---
+**Note**: If you want to automate the build and deployment of this pipeline, submit the commands in order in cloud shell after completing the above prerequisites. It skips step 5 below as it is redundant for auto-deployment.
 
 Find your Cloudbuild service account in the IAM console. Ex: [unique-id]@cloudbuild.gserviceaccount.com
 
@@ -94,7 +94,7 @@ gcloud projects add-iam-policy-binding [your-project-id] \
 #Deploy steps in cloudbuild configuration file
 gcloud builds submit --config cloudbuild.yaml .
 ```
-
+---
 3.  Change directory to relevant code
 
 ```bash
