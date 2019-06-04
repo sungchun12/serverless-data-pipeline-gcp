@@ -47,6 +47,18 @@
 - An open Google Cloud account: <https://cloud.google.com/free/>
 - Proficient in Python and SQL
 - A heart and mind eager to create data pipelines
+
+[![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/sungchun12/serverless_data_pipeline_gcp.git)
+
+_OR_
+
+1.  Activate Cloud Shell: <https://cloud.google.com/shell/docs/quickstart#start_cloud_shell>
+2.  Clone repository
+
+```bash
+git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
+```
+
 - Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API, Cloud Build API(gcloud CLI equivalent below when submitted through cloud shell)
 
 ```bash
@@ -64,17 +76,6 @@ gcloud services enable \
     storage-component.googleapis.com \
     bigquery-json.googleapis.com \
     cloudbuild.googleapis.com
-```
-
-[![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/sungchun12/serverless_data_pipeline_gcp.git)
-
-OR
-
-1.  Activate Cloud Shell: <https://cloud.google.com/shell/docs/quickstart#start_cloud_shell>
-2.  Clone repository
-
-```bash
-git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
 ```
 
 ---
