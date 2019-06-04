@@ -66,7 +66,7 @@ gcloud services enable \
     cloudbuild.googleapis.com
 ```
 
-[![Open in Cloud Shell](//gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/sungchun12/serverless_data_pipeline_gcp.git)
+[![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/sungchun12/serverless_data_pipeline_gcp.git)
 
 OR
 
