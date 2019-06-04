@@ -36,15 +36,15 @@
 
 **Further Reading:** For those looking for production-level deployments
 
-- Streaming Tutorial: https://cloud.google.com/solutions/streaming-data-from-cloud-storage-into-bigquery-using-cloud-functions#create_the_cloud_storage_bucket
-- BQPipeline Utility Functions: https://github.com/GoogleCloudPlatform/professional-services/tree/master/tools/bqpipeline
+- Streaming Tutorial: <https://cloud.google.com/solutions/streaming-data-from-cloud-storage-into-bigquery-using-cloud-functions#create_the_cloud_storage_bucket>
+- BQPipeline Utility Functions: <https://github.com/GoogleCloudPlatform/professional-services/tree/master/tools/bqpipeline>
 - I discovered the above after I created this pipeline...HA!
 
 # Deployment Instructions
 
 **Prerequisites:**
 
-- An open Google Cloud account: https://cloud.google.com/free/
+- An open Google Cloud account: <https://cloud.google.com/free/>
 - Proficient in Python and SQL
 - A heart and mind eager to create data pipelines
 - Enable Google Cloud APIs: Stackdriver Trace API, Cloud Functions API, Cloud Pub/Sub API, Cloud Scheduler API, Cloud Storage, BigQuery API, Cloud Build API(gcloud CLI equivalent below when submitted through cloud shell)
@@ -76,7 +76,9 @@ OR
 ```bash
 git clone https://github.com/sungchun12/serverless_data_pipeline_gcp.git
 ```
+
 ---
+
 **Note**: If you want to automate the build and deployment of this pipeline, submit the commands in order in cloud shell after completing the above prerequisites. It skips step 5 below as it is redundant for auto-deployment.
 
 Find your Cloudbuild service account in the IAM console. Ex: [unique-id]@cloudbuild.gserviceaccount.com
@@ -94,7 +96,9 @@ gcloud projects add-iam-policy-binding [your-project-id] \
 #Deploy steps in cloudbuild configuration file
 gcloud builds submit --config cloudbuild.yaml .
 ```
+
 ---
+
 3.  Change directory to relevant code
 
 ```bash
