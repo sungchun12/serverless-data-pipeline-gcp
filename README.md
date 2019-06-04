@@ -80,7 +80,7 @@ gcloud services enable \
 
 ---
 
-**Note**: If you want to automate the build and deployment of this pipeline, submit the commands in order in cloud shell after completing the above prerequisites. It skips step 5 below as it is redundant for auto-deployment.
+**Note**: If you want to automate the build and deployment of this pipeline, submit the commands in order in cloud shell after completing the above steps. It skips step 5 below as it is redundant for auto-deployment.
 
 Find your Cloudbuild service account in the IAM console. Ex: [unique-id]@cloudbuild.gserviceaccount.com
 
