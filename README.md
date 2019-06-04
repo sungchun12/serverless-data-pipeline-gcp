@@ -66,7 +66,11 @@ gcloud services enable \
     cloudbuild.googleapis.com
 ```
 
-1.  Activate Cloud Shell: https://cloud.google.com/shell/docs/quickstart#start_cloud_shell
+[![Open & Git Clone in Cloud Shell](//gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/sungchun12/serverless_data_pipeline_gcp.git)
+
+OR
+
+1.  Activate Cloud Shell: <https://cloud.google.com/shell/docs/quickstart#start_cloud_shell>
 2.  Clone repository
 
 ```bash
